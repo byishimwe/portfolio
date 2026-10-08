@@ -5,8 +5,7 @@ export default tseslint.config(
   {
     ignores: [
       "node_modules/**",
-      "build/**",
-      ".react-router/**",
+      "dist/**",
       "tmp/**",
       "test-results/**",
       "playwright-report/**",
@@ -15,7 +14,7 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ["app/**/*.{ts,tsx}"],
+    files: ["src/**/*.{ts,tsx}"],
     plugins: { "react-hooks": hooks },
     rules: {
       "react-hooks/rules-of-hooks": "error",
@@ -29,6 +28,8 @@ export default tseslint.config(
         matchMedia: "readonly",
         requestAnimationFrame: "readonly",
         cancelAnimationFrame: "readonly",
+        sessionStorage: "readonly",
+        history: "readonly",
       },
     },
   },

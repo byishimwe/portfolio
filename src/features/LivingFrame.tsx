@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { flushSync } from "react-dom";
-import { Link, useLocation, useViewTransitionState } from "react-router";
+import { useLocation } from "react-router";
+import {
+  TransitionLink as Link,
+  useProjectTransition,
+} from "./navigation/Transitions";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -20,7 +24,7 @@ export function LivingFrame() {
   const generation = useRef(0);
   const reduced = useReducedMotion();
   const location = useLocation();
-  const transitioning = useViewTransitionState(`/work/${displayed.slug}`);
+  const transitioning = useProjectTransition(`/work/${displayed.slug}`);
 
   useEffect(() => {
     const media = matchMedia(desktopQuery);

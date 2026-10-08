@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { useViewTransitionState } from "react-router";
+import { useProjectTransition } from "../features/navigation/Transitions";
 import type { Media, Project } from "../content/projects";
 export function MediaFrame({
   project,
@@ -14,7 +14,7 @@ export function MediaFrame({
   transition?: boolean;
   className?: string;
 }) {
-  const transitioning = useViewTransitionState(`/work/${project.slug}`);
+  const transitioning = useProjectTransition(`/work/${project.slug}`);
   const image = useRef<HTMLImageElement>(null);
   const [failedSource, setFailedSource] = useState<string | null>(null);
   const failed = failedSource === media.src;

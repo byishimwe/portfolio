@@ -1,11 +1,4 @@
 import { Link } from "react-router";
-import { site } from "../config/site";
-export function meta() {
-  return [
-    { title: `Page not found | ${site.name}` },
-    { name: "robots", content: "noindex" },
-  ];
-}
 export default function NotFound() {
   return (
     <section className="container error-page">

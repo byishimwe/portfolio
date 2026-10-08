@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { projects, getProject } from "../../app/content/projects";
-import { site, whatsappUrl, emailUrl, metadata } from "../../app/config/site";
+import { projects, getProject } from "../../src/content/projects";
+import { site, whatsappUrl, emailUrl, metadata } from "../../src/config/site";
 import fs from "node:fs";
 describe("published content integrity", () => {
   it("emits absolute canonical and social URLs when the public origin is configured", () => {

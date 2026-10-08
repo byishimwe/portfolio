@@ -1,17 +1,9 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { metadata, site, whatsappUrl, emailUrl } from "../config/site";
+import { site, whatsappUrl, emailUrl } from "../config/site";
 import { LivingFrame } from "../features/LivingFrame";
 import { useReducedMotion } from "../hooks/useReducedMotion";
-export function meta() {
-  return metadata(
-    `${site.name} — Designer & Frontend Developer`,
-    "An independent designer and frontend developer in Rwanda, creating thoughtful websites and digital experiences for businesses and brands.",
-    "/",
-    "/social-home.webp",
-  );
-}
 const services = [
   [
     "Business Websites",

@@ -1,4 +1,60 @@
-import { defineConfig } from "vite";
-import { reactRouter } from "@react-router/dev/vite";
+import { defineConfig, loadEnv, type Plugin } from "vite";
+import fs from "node:fs";
+import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-export default defineConfig({ plugins: [tailwindcss(), reactRouter()] });
+export default defineConfig(({ mode }) => {
+  // Only the public origin is read. No server variables are injected into JS.
+  const configured = loadEnv(
+    mode,
+    process.cwd(),
+    "VITE_SITE_URL",
+  ).VITE_SITE_URL;
+  const origin = configured ? new URL(configured).origin : "";
+  const publicSeo: Plugin = {
+    name: "public-spa-seo",
+    transformIndexHtml(html) {
+      if (!origin) return html;
+      return {
+        html: html.replace(
+          'content="/social-home.webp"',
+          `content="${origin}/social-home.webp"`,
+        ),
+        tags: [
+          {
+            tag: "link",
+            attrs: {
+              "data-route-meta": "",
+              rel: "canonical",
+              href: `${origin}/`,
+            },
+            injectTo: "head",
+          },
+          {
+            tag: "meta",
+            attrs: {
+              "data-route-meta": "",
+              property: "og:url",
+              content: `${origin}/`,
+            },
+            injectTo: "head",
+          },
+        ],
+      };
+    },
+    generateBundle() {
+      if (!origin) return;
+      const routes = ["/", "/work/cafe-bliss", "/work/imizi", "/work/quad"];
+      this.emitFile({
+        type: "asset",
+        fileName: "sitemap.xml",
+        source: `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${routes.map((route) => `<url><loc>${origin}${route}</loc></url>`).join("")}</urlset>`,
+      });
+      this.emitFile({
+        type: "asset",
+        fileName: "robots.txt",
+        source: `${fs.readFileSync("public/robots.txt", "utf8")}\nSitemap: ${origin}/sitemap.xml\n`,
+      });
+    },
+  };
+  return { plugins: [react(), tailwindcss(), publicSeo] };
+});

@@ -11,7 +11,7 @@ for source in Path('tmp/captures').glob('*.png'):
     image.save(public / f'{source.stem}.webp', quality=90, method=6)
     dimensions[source.stem] = {'width': image.width, 'height': image.height}
     print(source.stem, image.size, (public / f'{source.stem}.webp').stat().st_size)
-Path('app/content/image-dimensions.json').write_text(json.dumps(dimensions, indent=2))
+Path('src/content/image-dimensions.json').write_text(json.dumps(dimensions, indent=2))
 
 font_path = 'C:/Windows/Fonts/arial.ttf'
 font = ImageFont.truetype(font_path, 45)

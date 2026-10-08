@@ -9,8 +9,8 @@ export default defineConfig({
     channel: process.env.PLAYWRIGHT_CHANNEL || undefined,
   },
   webServer: {
-    command: "npm run preview",
+    command: "npm run preview -- --host 127.0.0.1 --port 4173 --strictPort",
     url: "http://127.0.0.1:4173",
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: process.env.PLAYWRIGHT_REUSE_SERVER === "1",
   },
 });

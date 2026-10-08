@@ -9,12 +9,17 @@ export const site = {
 };
 export const whatsappUrl = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Hi Prince, I’d like to discuss a website project.")}`;
 export const emailUrl = `mailto:${site.email}?subject=${encodeURIComponent("Let’s build something thoughtful")}`;
+export type MetadataTag =
+  | { title: string }
+  | { name: string; content: string }
+  | { property: string; content: string }
+  | { tagName: "link"; rel: string; href: string };
 export function metadata(
   title: string,
   description: string,
   path: string,
   image: string,
-) {
+): MetadataTag[] {
   return [
     { title },
     { name: "description", content: description },
@@ -28,7 +33,11 @@ export function metadata(
     ...(site.origin
       ? [
           { property: "og:url", content: `${site.origin}${path}` },
-          { tagName: "link", rel: "canonical", href: `${site.origin}${path}` },
+          {
+            tagName: "link" as const,
+            rel: "canonical",
+            href: `${site.origin}${path}`,
+          },
         ]
       : []),
   ];

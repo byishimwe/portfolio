@@ -1,16 +1,19 @@
 # Deployment
 
-Target: Vercel static hosting. No public deployment has been made from this workspace, and there is no verified portfolio URL yet.
+Target: Vercel static hosting with the **Vite** preset. No public deployment has been made from this workspace; no real portfolio origin is configured.
 
-1. Import this repository into Vercel using the **Other** framework preset.
-2. Set the production environment variable `VITE_SITE_URL` to the actual HTTPS origin, with no path or trailing slash.
-3. Install with `npm ci`, build with `npm run build`, and publish **build/client**. The checked-in `vercel.json` supplies the build command, output directory, clean URLs, and basic response headers.
-4. Do not add a blanket rewrite to the homepage: each case study has its own prerendered HTML and metadata.
-5. Verify all four content routes by direct URL and refresh, the designed unknown-page response, hash returns, contact links, project links, and mobile layout.
-6. Inspect the served HTML for each page’s unique title, description, absolute canonical, and absolute Open Graph image. Request the social images directly. Test a real shared link in WhatsApp after deployment; preview caches may take time to update.
+1. Import the repository into Vercel and select Vite.
+2. Set `VITE_SITE_URL` to the actual public HTTPS origin, without a path or trailing slash.
+3. Install with `npm ci`, build with `npm run build`, and publish **dist/**. The checked-in `vercel.json` specifies these settings and preserves the existing response headers.
+4. The SPA fallback rewrites application routes to `/index.html`; Vercel serves existing static assets from the filesystem. Verify direct URLs and refresh for all three case studies.
+5. Check all four content routes, unknown routes, project anchors, browser Back, menus, contact links, media, responsive layouts, sitemap, and robots.txt after deployment.
 
-The build prerenders the four content routes plus `/404`. `scripts/postbuild.mjs` prepares Vercel’s static `404.html` and generates a sitemap when the real origin is configured. No application server is required.
+For a configured local build, copy `.env.example` to `.env`, set the public origin, and build. Environment files remain ignored. `VITE_SITE_URL` is public client configuration, not a secret. Do not create VITE-prefixed credentials or tokens. The Vite SEO plugin reads only the public origin and emits sitemap/robots output and absolute homepage canonical/social metadata. Without an origin it omits canonical URLs and uses relative social image paths.
 
-For a local configured build, copy `.env.example` to `.env`, set `VITE_SITE_URL`, and build. Environment files remain ignored. Without an origin, the build intentionally avoids fabricated canonical URLs and serves relative social image paths; this is suitable for local review, not the final outreach release.
+## SPA SEO limitations
 
-Outstanding launch steps: establish the real public origin, deploy through the owner’s Vercel account, and verify the actual public routes and social previews. Email and WhatsApp values are owner-confirmed; no message was sent as part of verification.
+Every application URL receives the same HTML shell. Case-study content and unique metadata are applied by React after JavaScript executes. Unknown routes display the designed error page and receive client noindex metadata, but the SPA fallback returns HTTP 200 rather than a server HTTP 404. Without JavaScript, the shell provides homepage metadata and an email contact fallback.
+
+Non-JavaScript social preview services may show the homepage preview for case-study links. Page-specific initial HTML, full no-JavaScript navigation, and accurate server status codes require an additional prerendering, SSR, or route-aware hosting response approach. These former framework prerendering capabilities are not preserved by the requested standard SPA. Test actual shared links after deployment before relying on case-specific previews.
+
+Outstanding launch work: establish the real public origin, deploy through the owner's Vercel account, and verify public responses and preview behavior. Contact destinations are owner-confirmed; no email or WhatsApp message was sent during testing.

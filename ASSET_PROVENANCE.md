@@ -11,7 +11,7 @@ Prepared on 8 October 2026. All website media is directly under `public/`. The o
 | `social-home.webp`                                                                       | Original typographic editorial composition                                                       | 1200 × 630; portfolio headline and identity                                                                                                                                      |
 | `favicon.svg`                                                                            | Original typographic monogram                                                                    | Code-native vector, no external artwork                                                                                                                                          |
 
-`app/content/image-dimensions.json` records exact intrinsic dimensions. Framing is implemented in CSS, with no misleading device mockup. DM Sans and Instrument Serif are self-hosted from Fontsource packages and retain their bundled open font licenses.
+`src/content/image-dimensions.json` records exact intrinsic dimensions. Framing is implemented in CSS, with no misleading device mockup. DM Sans and Instrument Serif are self-hosted from Fontsource packages and retain their bundled open font licenses.
 
 ## Quad evidence boundaries
 

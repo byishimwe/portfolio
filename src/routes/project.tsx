@@ -1,25 +1,11 @@
-import { Link } from "react-router";
-import type { Route } from "./+types/project";
+import { useParams } from "react-router";
+import { TransitionLink as Link } from "../features/navigation/Transitions";
 import { getProject, projects } from "../content/projects";
-import { site, metadata } from "../config/site";
 import { MediaFrame } from "../components/MediaFrame";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import NotFound from "./not-found";
-export function meta({ params }: Route.MetaArgs) {
-  const project = getProject(params.slug);
-  return project
-    ? metadata(
-        `${project.title} — ${project.type} | ${site.name}`,
-        project.summary,
-        `/work/${project.slug}`,
-        `/social-${project.slug}.webp`,
-      )
-    : [
-        { title: `Page not found | ${site.name}` },
-        { name: "robots", content: "noindex" },
-      ];
-}
-export default function ProjectPage({ params }: Route.ComponentProps) {
+export default function ProjectPage() {
+  const params = useParams();
   const project = getProject(params.slug);
   const reduced = useReducedMotion();
   if (!project) return <NotFound />;
