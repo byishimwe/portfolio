@@ -1,0 +1,50 @@
+{
+  "cafe-desktop": {
+    "width": 1425,
+    "height": 891
+  },
+  "cafe-menu": {
+    "width": 1425,
+    "height": 891
+  },
+  "cafe-mobile": {
+    "width": 375,
+    "height": 812
+  },
+  "cafe-reservation": {
+    "width": 1425,
+    "height": 891
+  },
+  "imizi-classes": {
+    "width": 1265,
+    "height": 712
+  },
+  "imizi-desktop": {
+    "width": 1265,
+    "height": 712
+  },
+  "imizi-membership": {
+    "width": 1265,
+    "height": 712
+  },
+  "imizi-mobile": {
+    "width": 375,
+    "height": 812
+  },
+  "quad-desktop": {
+    "width": 1265,
+    "height": 712
+  },
+  "quad-light": {
+    "width": 1265,
+    "height": 712
+  },
+  "quad-mobile": {
+    "width": 375,
+    "height": 812
+  },
+  "quad-polls": {
+    "width": 1265,
+    "height": 712
+  }
+}

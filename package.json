@@ -1,0 +1,44 @@
+{
+  "name": "living-frame-portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "react-router dev --host 0.0.0.0",
+    "build": "react-router build && node scripts/postbuild.mjs",
+    "preview": "node scripts/preview.mjs",
+    "typecheck": "react-router typegen && tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "check": "npm run typecheck && npm run lint && npm test && npm run build"
+  },
+  "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "@react-router/node": "^7.18.4",
+    "gsap": "^3.15.0",
+    "isbot": "^5",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-router": "^7.18.4"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@eslint/js": "^9.39.1",
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0",
+    "@playwright/test": "^1.63.0",
+    "@react-router/dev": "^7.18.4",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^24.19.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "prettier": "^3.9.9",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.71.1",
+    "vite": "^7.3.5",
+    "vitest": "^5.0.3"
+  }
+}
