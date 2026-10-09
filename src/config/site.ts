@@ -18,7 +18,7 @@ export function metadata(
   title: string,
   description: string,
   path: string,
-  image: string,
+  image: string | null,
 ): MetadataTag[] {
   return [
     { title },
@@ -26,10 +26,17 @@ export function metadata(
     { property: "og:type", content: "website" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    { property: "og:image", content: `${site.origin}${image}` },
-    { property: "og:image:width", content: "1200" },
-    { property: "og:image:height", content: "630" },
-    { name: "twitter:card", content: "summary_large_image" },
+    ...(image
+      ? [
+          { property: "og:image", content: `${site.origin}${image}` },
+          { property: "og:image:width", content: "1200" },
+          { property: "og:image:height", content: "630" },
+        ]
+      : []),
+    {
+      name: "twitter:card",
+      content: image ? "summary_large_image" : "summary",
+    },
     ...(site.origin
       ? [
           { property: "og:url", content: `${site.origin}${path}` },

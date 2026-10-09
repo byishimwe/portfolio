@@ -1,41 +1,44 @@
-# Architecture migration QA report
+# Redesign QA report
 
-Verified locally on Windows on 8 October 2026. The application now uses Vite development and production-preview servers and builds to **dist/**.
+Local verification on Windows, 9 October 2026. This report replaces the historical Living Frame migration results; those tests and screenshots do not establish acceptance of the new design.
 
-## Checks
+## Commands and results
 
-| Check                                      | Result               |
-| ------------------------------------------ | -------------------- |
-| Dependency installation                    | Passed               |
-| TypeScript                                 | Passed               |
-| ESLint                                     | Passed               |
-| Vitest                                     | Five tests passed    |
-| Production build                           | Passed               |
-| Playwright with installed Chrome           | Seven tests passed   |
-| Vite development server and rendered pages | Passed               |
-| Vite production preview and direct routes  | Passed               |
-| Production dependency audit                | Zero vulnerabilities |
-| Root images library ignore rule            | Preserved            |
+| Check                                        | Result                                                                    |
+| -------------------------------------------- | ------------------------------------------------------------------------- |
+| `npm run check`                              | Passed: TypeScript, ESLint, six Vitest tests, production build            |
+| `PLAYWRIGHT_CHANNEL=chrome npm run test:e2e` | Eight tests passed in installed Chrome                                    |
+| Prettier                                     | Passed                                                                    |
+| `npm run dev`                                | Vite starts and redesigned pages render on port 5173                      |
+| `npm run preview`                            | Vite production preview serves all direct routes on port 4173             |
+| `npm audit --omit=dev`                       | Zero production vulnerabilities                                           |
+| Configured-origin build                      | Canonical, sitemap and robots output verified with a reserved test origin |
+| `/images/` ignore rule                       | Preserved; library untouched                                              |
 
-Reproduce with `npm ci`, `npm run check`, and `$env:PLAYWRIGHT_CHANNEL='chrome'; npm run test:e2e`. Build before E2E tests. The suite starts a fresh `vite preview` server. A bundled browser can instead be installed with `npx playwright install chromium`.
+Browser tests cover the exact homepage section count, three projects in order, three services, About portrait slot, simple contact, absence of old galleries, one asset slot per case study, five source-correct rows, only Role/Year/Type metadata, external links after the image, direct refresh, unknown routes and metadata.
 
-## Behavior and preservation
+## Interaction, theme and motion
 
-- Homepage, all three case studies, direct refresh, next-project navigation, unknown routes, header anchors, project anchors, route heading focus, Back navigation, and scroll restoration are covered.
-- The native View Transition test checks that each project has exactly one shared-element name in both old and new snapshots. Normal navigation without that browser API, modifier clicks, reduced motion, and failed-image fallback are covered.
-- Gallery tests exercise forward, reverse, and rapid chapter changes and its release before Services. Mobile menus, Escape handling, focus return, and owner-confirmed contact destinations are covered.
-- All referenced images return successfully; visible lazy media decode. No existing public asset or project content was changed. The generated stylesheet retains the original production CSS hash.
-- Axe checks on all four content pages report zero WCAG 2 A/AA and WCAG 2.1 AA violations. This is an automated result, not accessibility certification.
-- Initial HTML is correctly a SPA shell with homepage metadata; client navigation installs unique page metadata. JavaScript-disabled verification covers the honest email fallback. Unknown URLs return the shell and display the designed error page with client noindex metadata.
+- Real non-circular project sequence, Back to Work, header anchors, route-heading focus, browser Back, and saved scroll positions pass.
+- Mobile menu supports keyboard opening, Tab into links, Escape dismissal and focus return; modified clicks retain native behavior. Contact hrefs retain owner-confirmed values. No contact message was sent.
+- System theme, saved explicit preference before DOMContentLoaded, route/refresh persistence, system changes, and blocked localStorage pass. Both themes are monochrome; all hero lines, including remembered., have identical computed foreground colors.
+- Frame sampling confirms hero, service and case-heading animation actually changes opacity and settles. Reduced motion removes translation, and image masks settle to the normal state. GSAP contexts and observers clean up on route changes.
+- A separate live-dev test with a temporary in-memory geometric fixture confirms missing-image fallback, a shared preview/case source, CSS cover cropping with focal position, full-image contain fit, and successful decoding. No fixture was written to public or used as production imagery.
 
-Responsive overflow checks cover 1920×1080, 1440×900, 1366×768, 1280×720, 1024×768, 768×1024, 430×932, 390×844, 375×812, 320×700, and short-height desktop 1440×650. Stacked media remain visible at the appropriate breakpoints.
+## Responsive and visual review
 
-All eleven before/after screenshots are pixel-identical against the final production preview. They cover the homepage and three case-study openings at desktop and mobile sizes, plus all three desktop gallery frames. Temporary screenshots and comparison measurements are ignored under `tmp/`; Playwright artifacts remain ignored.
+All four content routes were checked in both themes at 1440×900, 1366×768, 1280×720, 1024×768, 768×1024, 430×932, 390×844, 375×812 and 320×700. No horizontal overflow or unintended hero-line wrapping was found.
 
-The configured-origin build was separately checked for absolute homepage metadata, all four sitemap URLs, and the robots sitemap reference. The final local build has no invented public origin. Only the public `VITE_SITE_URL` variable exists; no server credentials were migrated into client variables.
+Sixteen full-page screenshots were generated at desktop 1440px and mobile 390px in light and dark themes, under ignored `tmp/redesign-qa/`. Representative homepage, Café Bliss, IMIZI and Quad images were opened and inspected. Review covered type hierarchy, foreground consistency, preview dimensions, service alignment, About text/portrait composition, contact simplicity, case-row legibility and real pagination. The supplied Café Bliss light/dark desktop/mobile reference was compared structurally; intentional differences correct inaccurate stack labels, extra metadata and fictional navigation, and reserve neutral owner-image slots.
 
-## Limits
+No approved homepage image was included in the supplied set or existing repository. A matching Downloads candidate was inspected and owner confirmation requested; homepage acceptance currently rests on the exact written brief. Final visual review with the approved homepage mockup and actual imagery remains outstanding.
 
-Framework prerendered content and initial case-study SEO, server-level HTTP 404, and full no-JavaScript navigation are no longer supplied. See [DEPLOYMENT.md](DEPLOYMENT.md) for consequences and alternative approaches. No public deployment, social preview-cache test, Firefox/WebKit, physical-device, screen-reader, or Lighthouse run was performed. Unsupported View Transitions are tested by removing the API in Chrome. Quad's synthetic-prop media disclosure is preserved.
+Eight Axe scans—four routes in both themes—report zero WCAG 2 A/AA and WCAG 2.1 AA violations. This is an automated result, not accessibility certification. Final imagery will need another visual/accessibility pass.
 
-The dependency tree retains one inherited low-severity development-only esbuild advisory; the production audit is clear.
+## Remaining input and limits
+
+The hero visual, three project images, authentic portrait and sharing artwork are pending. Tests automatically follow the asset map when files are activated. No final-asset completion is claimed. Personal Lesson Learned copy comes from the supplied brief and remains subject to final owner editorial review.
+
+The Vite SPA retains the documented initial-HTML and social-sharing limits: project content/metadata require JavaScript, unknown-route fallback has HTTP 200, and full no-JavaScript navigation is unavailable. The honest no-JavaScript email fallback passes. No production origin, public deployment, social-preview cache verification, Firefox/WebKit, physical-device or screen-reader verification is claimed.
+
+Local implementation and technical checks are complete; final mockup/asset acceptance and public launch are pending. See ASSET_REPLACEMENT.md, CONTENT_SOURCES.md and DEPLOYMENT.md.

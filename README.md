@@ -1,43 +1,45 @@
-# The Living Frame
+# Prince Arnaud Ishimwe — Portfolio
 
-An editorial portfolio for Prince Arnaud Ishimwe: a homepage and three case studies, with a native-scroll sticky exhibition on desktop and a stacked layout on smaller screens.
+A minimal portfolio for a Designer & Frontend Developer based in Rwanda. The current redesign brief replaces the historical Living Frame specifications in `docs/`.
 
-## Develop
+## Development
 
-Use Node.js 22.12+ or 24 and npm.
+Node.js 22.12+ or 24 and npm:
 
 ```sh
 npm ci
-npm run dev         # Vite development server, default port 5173
-npm run typecheck   # TypeScript
-npm run lint        # ESLint
-npm test            # Vitest
-npm run build       # tsc --noEmit && vite build; output dist/
-npm run preview     # Vite production preview, default port 4173
+npm run dev         # Vite, port 5173
 npm run check       # TypeScript, ESLint, Vitest, production build
-npm run test:e2e    # Playwright against a fresh production preview
+npm run preview     # dist/, port 4173
+npm run test:e2e    # build first; fresh production preview
 ```
 
-Install the test browser with `npx playwright install chromium`. On Windows, an installed Chrome can be used with `$env:PLAYWRIGHT_CHANNEL='chrome'`. Build before running E2E tests. Tests start their own preview server; `PLAYWRIGHT_REUSE_SERVER=1` explicitly opts into reusing a server.
+Install Chromium with `npx playwright install chromium`, or on Windows use `$env:PLAYWRIGHT_CHANNEL='chrome'` for installed Chrome. `PLAYWRIGHT_REUSE_SERVER=1` explicitly allows test-server reuse. `npm run typecheck`, `npm run lint`, and `npm test` also work independently. Format with Prettier.
 
 ## Architecture
 
-Vite, React 19, strict TypeScript, Tailwind CSS 4, GSAP with @gsap/react, and browser View Transitions. Vite uses `@vitejs/plugin-react` and `@tailwindcss/vite` directly. `index.html` loads `src/main.tsx`, which mounts `src/App.tsx` with React createRoot. React Router remains only for declarative BrowserRouter/Routes navigation between the homepage, three case studies, and the designed unknown-page screen. There is no Framework Mode plugin, framework server, loader, type generation, hydration, or framework build process.
+React 19, TypeScript, Vite, Tailwind CSS 4, DM Sans, Instrument Serif, GSAP and @gsap/react. Simple declarative React Router routes: `/`, `/work/cafe-bliss`, `/work/imizi`, `/work/quad`, and a catch-all not-found screen. No backend, framework mode, service routes, or separate About page.
 
-The feature architecture remains under `src/components`, `src/features`, `src/hooks`, `src/config`, `src/content`, and `src/styles`. `src/content/projects.ts` owns project copy and media; `src/config/site.ts` owns identity and contact destinations. LivingFrame retains its scroll state, image readiness, and GSAP choreography. The navigation feature implements native shared-element transitions, interruption handling, reduced-motion fallback, hash navigation, history scroll restoration, and route focus. RouteMetadata updates page-specific head tags after client navigation.
+- `src/components`: shared navigation, footer, metadata, and image slots.
+- `src/features/theme`: system-aware light/dark theme with persistent explicit choice; `index.html` chooses the theme before painting.
+- `src/features/navigation`: hash offsets, history scroll restoration, and route-heading focus.
+- `src/hooks/useQuietMotion.ts`: scoped GSAP entrances and one-time IntersectionObserver reveals; reduced motion renders content immediately. CSS owns hover/focus/theme transitions.
+- `src/config/assets.ts`: the five image slots and optional sharing image.
+- `src/content/projects.ts`: source-checked concise copy, real destinations, and non-circular previous/next navigation.
+- `src/styles/global.css`: monochrome design tokens and responsive composition.
 
-## SEO and rendering
+No pinned gallery, ScrollTrigger controller, shared-image route controller, supporting image collections, or generated imagery remains. The project uses ordinary route changes with quiet heading/image entrances.
 
-The initial HTML contains homepage metadata and an empty React mount point. React renders content and updates route-specific title, description, social tags, canonical links, and unknown-page noindex metadata. With `VITE_SITE_URL` configured, the Vite build also supplies absolute homepage social/canonical URLs, a four-route sitemap, and its robots reference.
+## Final imagery is pending
 
-This SPA no longer supplies prerendered content or case-study metadata before JavaScript, a server-level HTTP 404 for unknown routes, or full navigation without JavaScript. The noscript fallback offers email contact. Crawlers and social preview services that do not execute JavaScript may see homepage metadata on case-study URLs. Restoring those capabilities requires an additional prerendering, SSR, or route-aware hosting response approach; the standard SPA does not provide them. See [DEPLOYMENT.md](DEPLOYMENT.md).
+The owner will provide the hero visual, three project images, and an authentic portrait. Neutral slots reserve their composition without broken requests. Supply files directly in `public/` and activate their entries in the asset map. Each project uses the same source for its cropped work preview and complete case-study image. `/images/` stays ignored and untouched. No reference mockup is displayed as a production asset.
 
-## Media and configuration
+Follow [ASSET_REPLACEMENT.md](ASSET_REPLACEMENT.md). Approved sharing artwork is also pending; outdated social screenshots are removed and no image metadata is fabricated.
 
-Optimized images live directly in **public/**. The original **images/** library is untouched and ignored by Git. Existing assets and design remain unchanged. See [ASSET_PROVENANCE.md](ASSET_PROVENANCE.md) for sources and the Quad demo disclosure.
+## References, content and launch
 
-Optional media preparation: install Python and Pillow, capture PNGs into `tmp/captures`, then run `python scripts/prepare-assets.py`; its dimensions manifest is `src/content/image-dimensions.json`. Python is not required to build. The Quad capture harness accepts a source checkout: `node scripts/quad-preview.mjs ../quad/frontend`; it does not contact the production backend.
+The attached approved Café Bliss theme mockup is saved in `design-reference/`. Its generated technology labels and fictional navigation names are corrected by the owner's brief. The homepage implementation follows the exact written structure; the missing approved homepage reference is tracked in `design-reference/README.md`.
 
-`VITE_SITE_URL` is the only application environment variable and is a public HTTPS origin. Every VITE-prefixed variable is public client configuration; never put secrets there. No server-only credentials were migrated.
+Project facts are recorded in [CONTENT_SOURCES.md](CONTENT_SOURCES.md). Email and WhatsApp retain the owner's confirmed destinations; LinkedIn is omitted because no verified URL is configured.
 
-See [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md) and [QA_REPORT.md](QA_REPORT.md). The supplied phase documents in `docs/` remain historical design references; the owner's architecture migration request supersedes their framework-specific instructions.
+`VITE_SITE_URL` is optional public-origin configuration; VITE-prefixed variables must never hold secrets. The configured build supplies canonical URLs, sitemap and robots output. This client-rendered SPA has initial homepage metadata; project metadata requires JavaScript. See [DEPLOYMENT.md](DEPLOYMENT.md), [QA_REPORT.md](QA_REPORT.md), and [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md). No production domain is invented and no public deployment is claimed.

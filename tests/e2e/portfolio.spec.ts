@@ -1,61 +1,120 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-
-test("native shared-element snapshots preserve matching media identities", async ({
+import { projects } from "../../src/content/projects";
+import { assets, socialImage } from "../../src/config/assets";
+const routes = ["/", ...projects.map((project) => `/work/${project.slug}`)];
+test("minimal structure, accurate case copy and external actions", async ({
   page,
+  request,
 }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.addInitScript(() => {
-    const native = document.startViewTransition.bind(document);
-    const names = () =>
-      [...document.querySelectorAll("*")]
-        .map((element) => getComputedStyle(element).viewTransitionName)
-        .filter((name) => name && name !== "none");
-    document.startViewTransition = (update) => {
-      const before = names();
-      return native(async () => {
-        await (typeof update === "function" ? update() : update?.update?.());
-        document.documentElement.dataset.transitionSnapshots = JSON.stringify({
-          before,
-          after: names(),
-        });
-      });
-    };
-  });
-  for (const slug of ["cafe-bliss", "imizi", "quad"]) {
-    await page.goto(`/#project-${slug}`);
-    await expect(page.locator(".stage")).toHaveAttribute("data-active", slug);
-    await page
-      .locator(`#project-${slug}`)
-      .getByRole("link", { name: "Explore Project" })
-      .click();
-    await expect(page).toHaveURL(new RegExp(`/work/${slug}$`));
-    await expect
-      .poll(() =>
-        page.locator("html").getAttribute("data-transition-snapshots"),
-      )
-      .not.toBeNull();
-    const snapshots: { before: string[]; after: string[] } = JSON.parse(
-      (await page.locator("html").getAttribute("data-transition-snapshots"))!,
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.emulateMedia({ reducedMotion: "reduce", colorScheme: "light" });
+  await page.goto("/");
+  expect(await page.locator(".homepage > section").count()).toBe(5);
+  await expect(page.locator(".project-row")).toHaveCount(3);
+  await expect(page.locator(".service")).toHaveCount(3);
+  await expect(page.locator("#about [data-asset]")).toHaveCount(1);
+  await expect(
+    page.locator("#contact [data-asset], #contact img, #about a"),
+  ).toHaveCount(0);
+  expect(
+    await page.locator(".living-frame, .stage, .pin-spacer, iframe").count(),
+  ).toBe(0);
+  const colors = await page
+    .locator("h1 .hero-line")
+    .evaluateAll((elements) =>
+      elements.map((element) => getComputedStyle(element).color),
     );
-    for (const names of [snapshots.before, snapshots.after]) {
-      expect(
-        names.filter((name) => name === `project-${slug}-media`),
-      ).toHaveLength(1);
-      expect(new Set(names).size).toBe(names.length);
-    }
+  expect(new Set(colors).size).toBe(1);
+  for (const project of projects) {
+    expect((await request.get(`/work/${project.slug}`)).status()).toBe(200);
+    await page.goto(`/work/${project.slug}`);
+    await expect(page.locator("h1")).toHaveText(project.title);
+    await page.reload();
+    await expect(page.locator(".case-image")).toHaveCount(1);
+    await expect(page.locator(".case-study [data-asset]")).toHaveCount(1);
+    await expect(page.locator(".case-row")).toHaveCount(5);
+    await expect(page.locator(".case-row").nth(3).locator("dd")).toHaveText(
+      project.rows[3],
+    );
+    await expect(page.locator(".case-metadata dt")).toHaveText([
+      "Role",
+      "Year",
+      "Type",
+    ]);
+    await expect(page.locator(".case-actions a").first()).toHaveAttribute(
+      "href",
+      project.liveUrl,
+    );
+    await expect(page.locator(".case-actions a").last()).toHaveAttribute(
+      "href",
+      project.repositoryUrl,
+    );
+    expect(
+      await page
+        .locator(".case-image")
+        .evaluate(
+          (element) =>
+            !!(
+              element.compareDocumentPosition(
+                document.querySelector(".case-actions")!,
+              ) & Node.DOCUMENT_POSITION_FOLLOWING
+            ),
+        ),
+    ).toBe(true);
+    await expect(page.locator("head title")).toHaveCount(1);
+    await expect(page).toHaveTitle(new RegExp(project.title));
+    await expect(page.locator('head meta[name="description"]')).toHaveAttribute(
+      "content",
+      project.summary,
+    );
+    await expect(page.locator('head meta[property="og:image"]')).toHaveCount(
+      socialImage ? 1 : 0,
+    );
   }
+  for (const route of ["/work/unknown", "/about", "/missing"]) {
+    await page.goto(route);
+    await expect(page.locator("h1")).toHaveText("Page not found.");
+    await expect(page.locator('head meta[name="robots"]')).toHaveAttribute(
+      "content",
+      "noindex",
+    );
+  }
+  expect(errors).toEqual([]);
 });
-
-test("header sections, scroll restoration and modified project links remain functional", async ({
+test("real sequence, route focus, anchors, browser Back and scroll restoration", async ({
   page,
 }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.locator("#project-cafe-bliss").click();
+  await expect(page.locator("h1")).toBeFocused();
+  await expect(page.locator(".project-pagination a").first()).toHaveAttribute(
+    "href",
+    "/#work",
+  );
+  await page
+    .getByRole("link", { name: "Next Project IMIZI Training Club" })
+    .click();
+  await expect(page).toHaveURL(/\/work\/imizi$/);
+  await expect(page.locator("h1")).toBeFocused();
+  await page.getByRole("link", { name: "Next Project Quad" }).click();
+  await expect(page).toHaveURL(/\/work\/quad$/);
+  await expect(page.locator(".project-pagination a").last()).toHaveAttribute(
+    "href",
+    "/#work",
+  );
+  await page
+    .getByRole("link", { name: "Previous Project IMIZI Training Club" })
+    .click();
+  await expect(page).toHaveURL(/\/work\/imizi$/);
   for (const [label, id] of [
     ["Work", "work"],
     ["Services", "services"],
     ["About", "about"],
-    ["Start a Project", "contact"],
+    ["Contact", "contact"],
   ]) {
     await page.goto("/work/cafe-bliss");
     await page
@@ -63,24 +122,11 @@ test("header sections, scroll restoration and modified project links remain func
       .getByRole("link", { name: label, exact: true })
       .click();
     await expect(page).toHaveURL(new RegExp(`#${id}$`));
-    await expect
-      .poll(() =>
-        page
-          .locator(`#${id}`)
-          .evaluate((element) =>
-            Math.round(element.getBoundingClientRect().top),
-          ),
-      )
-      .toBeGreaterThanOrEqual(60);
-    await expect
-      .poll(() =>
-        page
-          .locator(`#${id}`)
-          .evaluate((element) =>
-            Math.round(element.getBoundingClientRect().top),
-          ),
-      )
-      .toBeLessThan(250);
+    const top = await page
+      .locator(`#${id}`)
+      .evaluate((element) => element.getBoundingClientRect().top);
+    expect(top).toBeGreaterThanOrEqual(80);
+    expect(top).toBeLessThan(900);
   }
   await page.goto("/");
   await page
@@ -88,26 +134,158 @@ test("header sections, scroll restoration and modified project links remain func
     .evaluate((element) =>
       element.scrollIntoView({ block: "start", behavior: "instant" }),
     );
-  await expect(page.locator(".stage")).toHaveAttribute("data-active", "quad");
-  const savedY = await page.evaluate(() => window.scrollY);
-  await page
-    .locator("#project-quad")
-    .getByRole("link", { name: "Explore Project" })
-    .click();
+  const y = await page.evaluate(() => scrollY);
+  await page.locator("#project-quad").click();
   await expect(page).toHaveURL(/\/work\/quad$/);
   await page.goBack();
-  await expect(page.locator("h1")).toContainText("Digital experiences");
+  await expect(page.locator("#hero-title")).toBeVisible();
   await expect
-    .poll(() => page.evaluate((y) => Math.abs(window.scrollY - y), savedY))
+    .poll(() => page.evaluate((saved) => Math.abs(scrollY - saved), y))
     .toBeLessThan(3);
-  await page.goto("/#project-cafe-bliss");
-  // Observe cancellation after React's root listener. Block only the browser's
-  // new-tab default action, which headless Chrome does not expose as a popup.
+  await page.goto("/work/cafe-bliss");
+  await page.locator(".back-link").click();
+  await expect(page).toHaveURL(/#project-cafe-bliss$/);
+});
+test("system theme, pre-paint saved preference, persistence and unavailable storage", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({ colorScheme: "dark" });
+  const page = await context.newPage();
+  await page.goto("/");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.getByRole("button", { name: "Switch to light theme" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.goto("/work/quad");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.addInitScript(() => {
+    document.addEventListener("DOMContentLoaded", () => {
+      document.documentElement.dataset.initialTheme =
+        document.documentElement.dataset.theme;
+    });
+  });
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-initial-theme",
+    "light",
+  );
+  await page.emulateMedia({ colorScheme: "dark" });
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.evaluate(() => localStorage.removeItem("portfolio-theme"));
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.emulateMedia({ colorScheme: "dark" });
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await context.close();
+  const blocked = await browser.newContext({ colorScheme: "dark" });
+  await blocked.addInitScript(() => {
+    Object.defineProperty(window, "localStorage", {
+      get() {
+        throw new Error("Storage disabled");
+      },
+    });
+  });
+  const blockedPage = await blocked.newPage();
+  await blockedPage.goto("/");
+  await expect(blockedPage.locator("html")).toHaveAttribute(
+    "data-theme",
+    "dark",
+  );
+  await blockedPage
+    .getByRole("button", { name: "Switch to light theme" })
+    .click();
+  await expect(blockedPage.locator("html")).toHaveAttribute(
+    "data-theme",
+    "light",
+  );
+  await blocked.close();
+});
+test("responsive composition in both themes and rendered screenshots", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  for (const theme of ["light", "dark"] as const) {
+    for (const viewport of [
+      { width: 1440, height: 900 },
+      { width: 1366, height: 768 },
+      { width: 1280, height: 720 },
+      { width: 1024, height: 768 },
+      { width: 768, height: 1024 },
+      { width: 430, height: 932 },
+      { width: 390, height: 844 },
+      { width: 375, height: 812 },
+      { width: 320, height: 700 },
+    ]) {
+      await page.setViewportSize(viewport);
+      await page.emulateMedia({ colorScheme: theme });
+      for (const route of routes) {
+        await page.goto(route);
+        await expect(page.locator("h1")).toBeVisible();
+        await page.evaluate(() => document.fonts.ready);
+        expect(
+          await page.evaluate(
+            () => document.documentElement.scrollWidth <= innerWidth,
+          ),
+        ).toBe(true);
+        if (route === "/") {
+          const lines = await page
+            .locator(".hero-line")
+            .evaluateAll((elements) =>
+              elements.map((element) => ({
+                height: element.getBoundingClientRect().height,
+                line: parseFloat(getComputedStyle(element).lineHeight),
+              })),
+            );
+          for (const line of lines)
+            expect(line.height).toBeLessThan(line.line * 1.1);
+          const colors = await page
+            .locator(".hero-line")
+            .evaluateAll((elements) =>
+              elements.map((element) => getComputedStyle(element).color),
+            );
+          expect(new Set(colors).size).toBe(1);
+        }
+        if ([1440, 390].includes(viewport.width))
+          await page.screenshot({
+            path: `tmp/redesign-qa/${theme}-${viewport.width}-${route === "/" ? "home" : route.split("/").pop()}.png`,
+            fullPage: true,
+          });
+      }
+    }
+  }
+});
+test("keyboard mobile menu, modified links and confirmed contacts", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const menu = page.locator(".menu-button");
+  await menu.focus();
+  await page.keyboard.press("Enter");
+  await expect(menu).toHaveAttribute("aria-expanded", "true");
+  await page.keyboard.press("Tab");
+  await expect(page.locator(".mobile-nav a").first()).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(menu).toBeFocused();
+  await expect(menu).toHaveAttribute("aria-expanded", "false");
+  await menu.click();
+  await page
+    .locator(".mobile-nav")
+    .getByRole("link", { name: "About" })
+    .click();
+  await expect(page).toHaveURL(/#about$/);
+  await expect(menu).toHaveAttribute("aria-expanded", "false");
+  await expect(
+    page.getByRole("link", { name: "Start a Project" }),
+  ).toHaveAttribute("href", /wa\.me\/250795198946/);
+  await expect(
+    page.getByRole("link", { name: "or send an email" }),
+  ).toHaveAttribute("href", /^mailto:princeishimwe754@gmail\.com/);
+  await page.goto("/");
   await page.evaluate(() =>
     document.addEventListener(
       "click",
       (event) => {
-        document.documentElement.dataset.modifiedClickIntercepted = String(
+        document.documentElement.dataset.modifiedIntercepted = String(
           event.defaultPrevented,
         );
         event.preventDefault();
@@ -115,126 +293,88 @@ test("header sections, scroll restoration and modified project links remain func
       { once: true },
     ),
   );
-  await page
-    .locator("#project-cafe-bliss")
-    .getByRole("link", { name: "Explore Project" })
-    .click({ modifiers: ["Control"] });
+  await page.locator("#project-cafe-bliss").click({ modifiers: ["Control"] });
   await expect(page.locator("html")).toHaveAttribute(
-    "data-modified-click-intercepted",
+    "data-modified-intercepted",
     "false",
   );
-  await expect(page).toHaveURL(/#project-cafe-bliss$/);
+  await expect(page).toHaveURL(/\/$/);
 });
-
-test("project transitions, browser history, fallback routing and failed media", async ({
+test("quiet motion is visible, settles, cleans up, and respects reduced motion", async ({
   page,
-  browser,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  const errors: string[] = [];
-  page.on("pageerror", (error) => errors.push(error.message));
-  page.on("console", (message) => {
-    if (/duplicate view-transition|hydration/i.test(message.text()))
-      errors.push(message.text());
-  });
-  for (const slug of ["cafe-bliss", "imizi", "quad"]) {
-    await page.goto(`/#project-${slug}`);
-    await expect(page.locator(".stage"))
-      .toHaveAttribute("data-active", slug)
-      .catch(async (error) => {
-        await test.info().attach("anchor-geometry", {
-          body: JSON.stringify(
-            await page.evaluate(() => ({
-              y: window.scrollY,
-              hash: window.location.hash,
-              chapters: [...document.querySelectorAll(".project-chapter")].map(
-                (element) => ({
-                  id: element.id,
-                  top: element.getBoundingClientRect().top,
-                  height: element.getBoundingClientRect().height,
-                }),
-              ),
-            })),
-          ),
-          contentType: "application/json",
-        });
-        throw error;
-      });
-    await page
-      .locator(`#project-${slug}`)
-      .getByRole("link", { name: "Explore Project" })
-      .click();
-    await expect(page).toHaveURL(new RegExp(`/work/${slug}$`));
-    await expect(page.locator("h1")).toBeFocused();
-    await page.reload();
-    await expect(page.locator(".case-hero img")).toBeVisible();
-    await page.goBack();
-    await expect(page.locator(".stage")).toHaveAttribute("data-active", slug);
-  }
-  await page.goto("/work/cafe-bliss");
-  await page.getByRole("link", { name: /Next project/ }).click();
-  await expect(page).toHaveURL(/\/work\/imizi$/);
   await page.addInitScript(() => {
-    Object.defineProperty(document, "startViewTransition", {
-      value: undefined,
-      configurable: true,
-    });
+    const states: string[] = [];
+    const sample = () => {
+      for (const selector of [".hero-line", ".service", ".case-intro"]) {
+        const element = document.querySelector(selector);
+        if (element && +getComputedStyle(element).opacity < 0.98)
+          states.push(selector);
+      }
+      document.documentElement.dataset.motionSamples = JSON.stringify([
+        ...new Set(states),
+      ]);
+      requestAnimationFrame(sample);
+    };
+    requestAnimationFrame(sample);
   });
-  await page.goto("/#project-quad");
+  await page.goto("/");
+  await expect
+    .poll(() => page.locator("html").getAttribute("data-motion-samples"))
+    .toContain(".hero-line");
+  await expect(page.locator(".hero-line").last()).toHaveCSS("opacity", "1");
+  await expect(page.locator(".hero-visual")).toHaveCSS("transform", "none");
   await page
-    .locator("#project-quad")
-    .getByRole("link", { name: "Explore Project" })
-    .click();
-  await expect(page.locator("h1")).toHaveText("Quad");
-  const failureContext = await browser.newContext({
-    viewport: { width: 1440, height: 900 },
-  });
-  const failurePage = await failureContext.newPage();
-  await failurePage.route("**/cafe-desktop.webp", (route) => route.abort());
-  await failurePage.goto("/#project-cafe-bliss");
-  await expect(failurePage.locator(".stage .media-fallback")).toBeVisible();
-  await failurePage
-    .locator("#project-cafe-bliss")
-    .getByRole("link", { name: "Explore Project" })
-    .click();
-  await expect(failurePage.locator(".case-hero .media-fallback")).toBeVisible();
-  await failureContext.close();
-  expect(errors).toEqual([]);
-});
-
-test("SPA deep links, client metadata, images and accessibility", async ({
-  page,
-  request,
-}) => {
-  for (const [route, title] of [
-    ["/", "Prince Arnaud Ishimwe"],
-    ["/work/cafe-bliss", "Café Bliss"],
-    ["/work/imizi", "IMIZI Training Club"],
-    ["/work/quad", "Quad"],
-  ]) {
-    const response = await request.get(route);
-    expect(response.status()).toBe(200);
-    const html = await response.text();
-    expect(html).toContain('id="root"');
-    expect(html).toContain("Prince Arnaud Ishimwe");
-    // SPA HTML has homepage defaults; project metadata is applied by React.
-    expect(html).not.toContain('class="case-study');
-    expect(html).toContain('property="og:image"');
-    await page.goto(route);
-    await expect(page.locator("h1")).toBeVisible();
-    await expect(page).toHaveTitle(new RegExp(title));
-    await expect(
-      page.locator('head meta[property="og:image"]'),
-    ).toHaveAttribute(
-      "content",
-      `/social-${route === "/" ? "home" : route.split("/").pop()}.webp`,
+    .locator(".service-grid")
+    .evaluate((element) =>
+      element.scrollIntoView({ behavior: "instant", block: "center" }),
     );
-    await expect(page.locator("head title")).toHaveCount(1);
-    await expect(page.locator('head meta[name="description"]')).toHaveCount(1);
-    for (const image of await page.locator("img").all()) {
-      const src = await image.getAttribute("src");
-      expect((await request.get(src!)).status()).toBe(200);
-      if (await image.isVisible()) {
+  await expect
+    .poll(() => page.locator("html").getAttribute("data-motion-samples"))
+    .toContain(".service");
+  await expect(page.locator(".service").last()).toHaveCSS("opacity", "1");
+  await page.locator("#project-cafe-bliss").click();
+  await expect
+    .poll(() => page.locator("html").getAttribute("data-motion-samples"))
+    .toContain(".case-intro");
+  await expect(page.locator(".case-image")).toHaveCSS("transform", "none");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await expect(page.locator(".hero-line").first()).toHaveCSS(
+    "transform",
+    "none",
+  );
+  await expect(page.locator(".hero-line").first()).toHaveCSS("opacity", "1");
+  await page.locator("#project-quad").click();
+  await expect(page.locator("h1")).toBeFocused();
+  await expect(page.locator(".case-intro")).toHaveCSS("transform", "none");
+});
+test("accessible themes, truthful placeholders and no missing media requests", async ({
+  page,
+}) => {
+  const failures: string[] = [];
+  page.on("response", (response) => {
+    if (response.status() >= 400) failures.push(response.url());
+  });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  for (const theme of ["light", "dark"] as const)
+    for (const route of routes) {
+      await page.emulateMedia({ colorScheme: theme });
+      await page.goto(route);
+      await expect(page.locator("h1")).toBeVisible();
+      const expectedImages =
+        route === "/"
+          ? Object.values(assets).filter((asset) => asset.src).length
+          : Number(
+              Boolean(
+                assets[
+                  projects.find((project) => route.endsWith(project.slug))!.slug
+                ].src,
+              ),
+            );
+      await expect(page.locator("img")).toHaveCount(expectedImages);
+      for (const image of await page.locator("img").all()) {
         await image.scrollIntoViewIfNeeded();
         await expect
           .poll(() =>
@@ -244,124 +384,17 @@ test("SPA deep links, client metadata, images and accessibility", async ({
           )
           .toBeGreaterThan(0);
       }
+      const results = await new AxeBuilder({ page })
+        .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+        .analyze();
+      expect(results.violations).toEqual([]);
     }
-    const results = await new AxeBuilder({ page })
-      .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
-      .analyze();
-    expect(results.violations).toEqual([]);
-    await page.screenshot({
-      path: `tmp/qa/${route === "/" ? "home" : route.split("/").pop()}-review.png`,
-      fullPage: true,
-    });
-  }
-  for (const route of ["/missing-page", "/work/unknown-project"]) {
-    expect((await request.get(route)).status()).toBe(200); // Static SPA fallback: soft 404.
-    await page.goto(route);
-    await expect(
-      page.getByRole("heading", { name: "Outside the frame." }),
-    ).toBeVisible();
-    await expect(page.locator('head meta[name="robots"]')).toHaveAttribute(
-      "content",
-      "noindex",
-    );
-  }
+  expect(failures).toEqual([]);
 });
-
-test("desktop sticky gallery follows scroll and survives rapid changes", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  const errors: string[] = [];
-  page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto("/");
-  await expect(page.locator(".living-frame")).toHaveClass(/enhanced/);
-  for (const slug of ["cafe-bliss", "imizi", "quad", "cafe-bliss", "quad"]) {
-    await page
-      .locator(`#project-${slug}`)
-      .evaluate((element) =>
-        element.scrollIntoView({ block: "start", behavior: "instant" }),
-      );
-    await expect(page.locator(".stage")).toHaveAttribute("data-active", slug);
-  }
-  await page
-    .locator("#project-imizi")
-    .getByRole("link", { name: "Explore Project" })
-    .click();
-  await expect(page).toHaveURL(/\/work\/imizi$/);
-  await expect(page.locator("h1")).toHaveText("IMIZI Training Club");
-  await page
-    .getByRole("link", { name: "Back to Selected Work", exact: false })
-    .first()
-    .click();
-  await expect(page).toHaveURL(/#project-imizi$/);
-  await expect(page.locator(".stage")).toHaveAttribute("data-active", "imizi");
-  expect(errors).toEqual([]);
-});
-
-test("responsive layouts, menu, contact links and reduced motion", async ({
-  page,
-}) => {
-  for (const viewport of [
-    { width: 320, height: 700 },
-    { width: 375, height: 812 },
-    { width: 390, height: 844 },
-    { width: 430, height: 932 },
-    { width: 768, height: 1024 },
-    { width: 1024, height: 768 },
-    { width: 1280, height: 720 },
-    { width: 1366, height: 768 },
-    { width: 1440, height: 650 },
-    { width: 1440, height: 900 },
-    { width: 1920, height: 1080 },
-  ]) {
-    await page.setViewportSize(viewport);
-    await page.goto("/");
-    expect(
-      await page.evaluate(
-        () => document.documentElement.scrollWidth <= innerWidth,
-      ),
-    ).toBe(true);
-    const enhanced = viewport.width >= 1100 && viewport.height >= 700;
-    if (!enhanced)
-      await expect(page.locator(".chapter-media").first()).toBeVisible();
-    for (const slug of ["cafe-bliss", "imizi", "quad"]) {
-      await page.goto(`/work/${slug}`);
-      expect(
-        await page.evaluate(
-          () => document.documentElement.scrollWidth <= innerWidth,
-        ),
-      ).toBe(true);
-    }
-  }
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
-  const menu = page.locator(".menu-button");
-  await menu.click();
-  await expect(menu).toHaveAttribute("aria-expanded", "true");
-  await page.keyboard.press("Escape");
-  await expect(menu).toHaveAttribute("aria-expanded", "false");
-  await expect(menu).toBeFocused();
-  await expect(
-    page.getByRole("link", { name: "Start a Project", exact: true }),
-  ).toHaveAttribute("href", /wa\.me\/250795198946/);
-  await expect(
-    page.getByRole("link", { name: "Send an Email" }),
-  ).toHaveAttribute("href", /^mailto:princeishimwe754@gmail\.com/);
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page
-    .locator("#project-quad")
-    .getByRole("link", { name: "Explore Project" })
-    .click();
-  await expect(page.locator("h1")).toHaveText("Quad");
-});
-
-test("no-JavaScript fallback explains SPA requirement and retains contact", async ({
+test("no-JavaScript fallback remains honest and retains email", async ({
   browser,
 }) => {
-  const context = await browser.newContext({
-    javaScriptEnabled: false,
-    viewport: { width: 1440, height: 900 },
-  });
+  const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   await page.goto("/");
   await expect(page.locator("h1")).toHaveText("Enable JavaScript to explore.");

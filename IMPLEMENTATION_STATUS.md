@@ -1,28 +1,22 @@
-# Implementation status
+# Redesign implementation status
 
-The existing Living Frame Portfolio has been migrated to Vite + React 19 + TypeScript without redesigning or recreating its interface.
+The current owner brief replaces the obsolete Living Frame design. The homepage now contains only Hero, Selected Work, What I Do, About Me, and Contact, between shared minimal navigation and footer.
 
-| Feature                                                                           | Status                                             |
-| --------------------------------------------------------------------------------- | -------------------------------------------------- |
-| Existing homepage, three case studies, content and assets                         | Preserved                                          |
-| Desktop sticky exhibition, GSAP choreography and image readiness                  | Preserved                                          |
-| Responsive layouts, menus, contact links and reduced motion                       | Preserved                                          |
-| Project-specific native View Transitions                                          | Migrated to a client navigation controller         |
-| Direct routes, project hashes, history scroll restoration and heading focus       | Migrated to SPA navigation                         |
-| Page-specific title, description, social tags, canonical and unknown-page noindex | Applied after JavaScript                           |
-| Homepage initial metadata and configured sitemap/robots output                    | Complete; public origin required for absolute URLs |
-| Direct Vite React/Tailwind plugins, createRoot and declarative routes             | Complete                                           |
-| Framework plugin, server dependencies, generated types and build scripts          | Removed                                            |
-| Vercel dist output and SPA fallback                                               | Configured                                         |
-| Prerendered content and case metadata, server HTTP 404, full no-JS navigation     | Require an alternative rendering/hosting approach  |
-| Public deployment                                                                 | Not performed                                      |
+| Area                                                                           | Status                                                              |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------- |
+| Living Frame sticky gallery, controllers, long narratives and supporting media | Removed                                                             |
+| Compact three-project rows and three service columns                           | Implemented                                                         |
+| About portrait slot and minimal contact                                        | Implemented                                                         |
+| One complete image slot and five concise rows on each case study               | Implemented                                                         |
+| Correct non-circular previous/next sequence                                    | Implemented                                                         |
+| Light/dark/system themes, saved choice and pre-paint setup                     | Implemented                                                         |
+| Quiet hero/reveal/hover/case entrances and reduced motion                      | Implemented                                                         |
+| SPA routes, tooling, contact configuration and deployment fallback             | Preserved                                                           |
+| Final five owner images and authentic portrait                                 | Pending owner assets                                                |
+| Approved sharing artwork                                                       | Pending                                                             |
+| Approved homepage mockup                                                       | Not present in the supplied reference set; exact written brief used |
+| Public deployment                                                              | Not performed                                                       |
 
-Verification is recorded in [QA_REPORT.md](QA_REPORT.md).
+Source facts and editorial boundaries are recorded in CONTENT_SOURCES. The supplied case-study mockup governs composition; the written brief overrides its extra technology metadata and fake previous/next projects. No extra About route, service links, contact image, color accent, testimonials or outcomes are added.
 
-## Decisions
-
-The architecture migration request supersedes framework requirements in the historical phase documents. Their design intent remains intact. Source directories moved from `app/` to `src/`; existing components, feature logic, hooks, configuration, content, and styles remain in that structure. React Router is retained only because the portfolio has actual client-side routes. Browser View Transitions now use explicit snapshot timing around React navigation; GSAP retains ownership of gallery animation.
-
-The owner's asset instruction remains in force: images live directly under `public/`, and `/images/` is ignored. Existing assets and stylesheet were preserved. Quad's actual source components were captured with synthetic props, as disclosed in public copy and provenance; no source project was modified.
-
-No production origin was invented. Only the public `VITE_SITE_URL` configuration is used. No server secrets are exposed. Initial case-study SEO and server response capabilities lost with client rendering are documented in README and DEPLOYMENT.
+Use ASSET_REPLACEMENT for the final media process and QA_REPORT for actual verification. Historical phase documents are retained only as background; they no longer govern this implementation.

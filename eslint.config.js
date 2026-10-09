@@ -30,6 +30,8 @@ export default tseslint.config(
         cancelAnimationFrame: "readonly",
         sessionStorage: "readonly",
         history: "readonly",
+        localStorage: "readonly",
+        IntersectionObserver: "readonly",
       },
     },
   },

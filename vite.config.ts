@@ -2,6 +2,7 @@ import { defineConfig, loadEnv, type Plugin } from "vite";
 import fs from "node:fs";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import { socialImage } from "./src/config/assets";
 export default defineConfig(({ mode }) => {
   // Only the public origin is read. No server variables are injected into JS.
   const configured = loadEnv(
@@ -15,11 +16,21 @@ export default defineConfig(({ mode }) => {
     transformIndexHtml(html) {
       if (!origin) return html;
       return {
-        html: html.replace(
-          'content="/social-home.webp"',
-          `content="${origin}/social-home.webp"`,
-        ),
+        html,
         tags: [
+          ...(socialImage
+            ? [
+                {
+                  tag: "meta",
+                  attrs: {
+                    "data-route-meta": "",
+                    property: "og:image",
+                    content: `${origin}${socialImage}`,
+                  },
+                  injectTo: "head" as const,
+                },
+              ]
+            : []),
           {
             tag: "link",
             attrs: {

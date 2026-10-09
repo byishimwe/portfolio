@@ -1,19 +1,23 @@
-# Deployment
+# Deployment preparation
 
-Target: Vercel static hosting with the **Vite** preset. No public deployment has been made from this workspace; no real portfolio origin is configured.
+The existing Vite SPA deployment configuration is retained: Vercel **Vite** preset, `npm ci`, `npm run build`, output `dist/`, and application fallback to `/index.html`. Existing files are served as static assets. Response headers remain configured in `vercel.json`.
 
-1. Import the repository into Vercel and select Vite.
-2. Set `VITE_SITE_URL` to the actual public HTTPS origin, without a path or trailing slash.
-3. Install with `npm ci`, build with `npm run build`, and publish **dist/**. The checked-in `vercel.json` specifies these settings and preserves the existing response headers.
-4. The SPA fallback rewrites application routes to `/index.html`; Vercel serves existing static assets from the filesystem. Verify direct URLs and refresh for all three case studies.
-5. Check all four content routes, unknown routes, project anchors, browser Back, menus, contact links, media, responsive layouts, sitemap, and robots.txt after deployment.
+Set `VITE_SITE_URL` to the real public HTTPS origin, without a path or trailing slash, before building. It is public browser configuration; never put secrets in VITE-prefixed variables. A configured build emits absolute canonicals, a sitemap for the four content routes, and a robots sitemap reference. No real origin has been supplied or invented.
 
-For a configured local build, copy `.env.example` to `.env`, set the public origin, and build. Environment files remain ignored. `VITE_SITE_URL` is public client configuration, not a secret. Do not create VITE-prefixed credentials or tokens. The Vite SEO plugin reads only the public origin and emits sitemap/robots output and absolute homepage canonical/social metadata. Without an origin it omits canonical URLs and uses relative social image paths.
+## SEO decision
 
-## SPA SEO limitations
+Retain the simple Vite/React Router architecture. Titles, descriptions, project categories, Open Graph text and canonical URLs update per route in React. The initial HTML contains homepage metadata. Unknown paths receive client noindex and the designed recovery page, but the SPA fallback returns HTTP 200.
 
-Every application URL receives the same HTML shell. Case-study content and unique metadata are applied by React after JavaScript executes. Unknown routes display the designed error page and receive client noindex metadata, but the SPA fallback returns HTTP 200 rather than a server HTTP 404. Without JavaScript, the shell provides homepage metadata and an email contact fallback.
+A small optional build-time HTML snapshot using the existing Playwright tooling was considered as the least invasive prerendering route. It would require a browser in the deployment build and a regeneration step whenever content/assets change. It is not enabled in the standard build; no framework migration or unreliable implicit prerendering is introduced. If non-JavaScript case-specific sharing is required at launch, add that explicit snapshot step or route-aware hosting responses and test them separately.
 
-Non-JavaScript social preview services may show the homepage preview for case-study links. Page-specific initial HTML, full no-JavaScript navigation, and accurate server status codes require an additional prerendering, SSR, or route-aware hosting response approach. These former framework prerendering capabilities are not preserved by the requested standard SPA. Test actual shared links after deployment before relying on case-specific previews.
+Current limitations: initial case-specific content/metadata require JavaScript; non-JavaScript crawlers may see homepage text on deep links; complete no-JavaScript navigation and server HTTP 404 are not provided. The noscript fallback retains email contact. Approved raster sharing artwork is pending, so image tags are omitted instead of referencing obsolete screenshots or missing files.
 
-Outstanding launch work: establish the real public origin, deploy through the owner's Vercel account, and verify public responses and preview behavior. Contact destinations are owner-confirmed; no email or WhatsApp message was sent during testing.
+## Launch checklist
+
+- Supply the five final images and authentic portrait slot contents as described in ASSET_REPLACEMENT; supply approved sharing artwork.
+- Confirm the homepage reference and the proposed personal-reflection copy.
+- Set the real public origin and deploy only through authorized access.
+- Verify all four routes on direct access/refresh, theme persistence, anchors, Back, mobile menu, reduced motion, asset requests, contact hrefs, sitemap and robots output.
+- Check real social previews and any required prerendering response behavior on the public host.
+
+No public deployment or contact message has been made by this task. Local technical completion does not mean final-image or public-launch completion.
