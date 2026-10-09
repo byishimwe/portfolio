@@ -30,9 +30,9 @@ React 19, TypeScript, Vite, Tailwind CSS 4, DM Sans, Instrument Serif, GSAP and 
 
 No pinned gallery, ScrollTrigger controller, shared-image route controller, supporting image collections, or generated imagery remains. The project uses ordinary route changes with quiet heading/image entrances.
 
-## Final imagery is pending
+## Imagery
 
-The owner will provide the hero visual, three project images, and an authentic portrait. Neutral slots reserve their composition without broken requests. Supply files directly in `public/` and activate their entries in the asset map. Each project uses the same source for its cropped work preview and complete case-study image. `/images/` stays ignored and untouched. No reference mockup is displayed as a production asset.
+The three owner-supplied project images are active as optimized WebP files. The hero visual and authentic portrait remain pending; their neutral slots reserve the composition without broken requests. Supply files directly in `public/` and activate their entries in the asset map. Each project uses the same source for its cropped work preview and complete case-study image. `/images/` stays ignored and untouched. No reference mockup is displayed as a production asset.
 
 Follow [ASSET_REPLACEMENT.md](ASSET_REPLACEMENT.md). Approved sharing artwork is also pending; outdated social screenshots are removed and no image metadata is fabricated.
 

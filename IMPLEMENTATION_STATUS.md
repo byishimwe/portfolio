@@ -12,7 +12,7 @@ The current owner brief replaces the obsolete Living Frame design. The homepage 
 | Light/dark/system themes, saved choice and pre-paint setup                     | Implemented                                                         |
 | Quiet hero/reveal/hover/case entrances and reduced motion                      | Implemented                                                         |
 | SPA routes, tooling, contact configuration and deployment fallback             | Preserved                                                           |
-| Final five owner images and authentic portrait                                 | Pending owner assets                                                |
+| Hero visual and authentic portrait                                             | Pending owner assets                                                |
 | Approved sharing artwork                                                       | Pending                                                             |
 | Approved homepage mockup                                                       | Not present in the supplied reference set; exact written brief used |
 | Public deployment                                                              | Not performed                                                       |
@@ -20,3 +20,5 @@ The current owner brief replaces the obsolete Living Frame design. The homepage 
 Source facts and editorial boundaries are recorded in CONTENT_SOURCES. The supplied case-study mockup governs composition; the written brief overrides its extra technology metadata and fake previous/next projects. No extra About route, service links, contact image, color accent, testimonials or outcomes are added.
 
 Use ASSET_REPLACEMENT for the final media process and QA_REPORT for actual verification. Historical phase documents are retained only as background; they no longer govern this implementation.
+
+Project-image follow-up: all three owner-supplied PNG presentations are converted to WebP and active in their respective work rows and case studies. The asset map records their actual 1672×941 intrinsic dimensions.

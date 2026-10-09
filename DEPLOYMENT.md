@@ -14,7 +14,7 @@ Current limitations: initial case-specific content/metadata require JavaScript; 
 
 ## Launch checklist
 
-- Supply the five final images and authentic portrait slot contents as described in ASSET_REPLACEMENT; supply approved sharing artwork.
+- The three project WebP images are installed. Supply the remaining hero visual, authentic portrait, and approved sharing artwork as described in ASSET_REPLACEMENT.
 - Confirm the homepage reference and the proposed personal-reflection copy.
 - Set the real public origin and deploy only through authorized access.
 - Verify all four routes on direct access/refresh, theme persistence, anchors, Back, mobile menu, reduced motion, asset requests, contact hrefs, sitemap and robots output.

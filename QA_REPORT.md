@@ -37,8 +37,12 @@ Eight Axe scans—four routes in both themes—report zero WCAG 2 A/AA and WCAG 
 
 ## Remaining input and limits
 
-The hero visual, three project images, authentic portrait and sharing artwork are pending. Tests automatically follow the asset map when files are activated. No final-asset completion is claimed. Personal Lesson Learned copy comes from the supplied brief and remains subject to final owner editorial review.
+The three project images are supplied and active as optimized WebP. The hero visual, authentic portrait, and sharing artwork remain pending. Tests automatically follow the asset map when files are activated. No final-asset completion is claimed. Personal Lesson Learned copy comes from the supplied brief and remains subject to final owner editorial review.
 
 The Vite SPA retains the documented initial-HTML and social-sharing limits: project content/metadata require JavaScript, unknown-route fallback has HTTP 200, and full no-JavaScript navigation is unavailable. The honest no-JavaScript email fallback passes. No production origin, public deployment, social-preview cache verification, Firefox/WebKit, physical-device or screen-reader verification is claimed.
 
 Local implementation and technical checks are complete; final mockup/asset acceptance and public launch are pending. See ASSET_REPLACEMENT.md, CONTENT_SOURCES.md and DEPLOYMENT.md.
+
+## Project image activation
+
+The owner-supplied PNGs were converted at WebP quality 92/method 6, without resizing. Each output decodes at 1672×941, matching the updated asset map. Combined size falls from 5,695,501 to 650,456 bytes (88.6% smaller). The original PNGs are preserved in ignored `tmp/project-image-originals/`; only the WebP files ship in public output. The same file is used for each cropped preview and complete case-study image. The existing asset-aware browser suite checks decoding and missing requests in both themes, across the responsive viewport matrix.
