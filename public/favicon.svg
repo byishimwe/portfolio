@@ -1,5 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Prince Arnaud Ishimwe — P monogram">
-  <rect width="64" height="64" fill="#FAF9F6"/>
-  <rect x="11" y="11" width="42" height="42" fill="none" stroke="#151515" stroke-width="3"/>
-  <path fill="#151515" fill-rule="evenodd" d="M21.5 18.5H32.8C41.1 18.5 45 21.7 45 27.2C45 32.8 41.1 36 32.8 36H28V45.5H21.5V18.5ZM28 23.8V30.8H32.5C36.6 30.8 38.5 29.7 38.5 27.3C38.5 24.9 36.6 23.8 32.5 23.8H28Z"/>
+  <style>
+    path { fill: #151515; }
+    @media (prefers-color-scheme: dark) {
+      path { fill: #faf9f6; }
+    }
+  </style>
+  <path fill="#151515" fill-rule="evenodd" d="M16 8H34C47 8 54 15 54 26S47 44 34 44H26V56H16V8ZM26 18V34H34C41 34 44 31 44 26S41 18 34 18H26Z"/>
 </svg>
