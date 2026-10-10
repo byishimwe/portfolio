@@ -171,11 +171,8 @@ img {
   color: var(--muted);
 }
 .menu-button {
-  display: flex;
-  width: auto;
-  gap: 8px;
-  padding-inline: 8px;
-  font-size: 13px;
+  display: grid;
+  place-items: center;
 }
 .mobile-nav {
   position: absolute;
@@ -197,7 +194,9 @@ img {
   grid-template-columns: 1.08fr 1fr;
   gap: 5%;
   align-items: center;
-  padding-block: 48px 58px;
+  min-height: calc(100vh - var(--header-height));
+  min-height: calc(100dvh - var(--header-height));
+  padding-block: 40px;
 }
 .hero-label {
   margin-bottom: 24px;
@@ -665,9 +664,6 @@ img {
     margin-left: auto;
     gap: 0;
   }
-  .menu-button {
-    display: flex;
-  }
   .wordmark {
     font-size: 13px;
   }
@@ -952,10 +948,11 @@ img {
 }
 @media (min-width: 601px) {
   .hero-visual {
-    aspect-ratio: 4 / 4.3;
-    max-height: min(480px, 65vh);
+    aspect-ratio: 1122 / 1402;
+    max-height: calc(100vh - var(--header-height) - 80px);
+    max-height: calc(100dvh - var(--header-height) - 80px);
   }
   .hero-visual img {
-    object-position: 50% 55%;
+    object-position: 50% 50%;
   }
 }

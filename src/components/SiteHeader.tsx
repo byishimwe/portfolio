@@ -61,7 +61,6 @@ export function SiteHeader() {
             aria-controls="mobile-navigation"
             onClick={() => setOpen(!open)}
           >
-            <span>Menu</span>
             <svg
               viewBox="0 0 24 24"
               width="22"
