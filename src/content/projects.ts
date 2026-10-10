@@ -30,15 +30,15 @@ export const projects: Project[] = [
     year: 2026,
     type: "Independent Concept",
     summary:
-      "A warm, inviting website for a fictional neighborhood café, designed around atmosphere, menu discovery, and the pleasure of slowing down.",
+      "An editorial website concept for a fictional neighborhood café, pairing a welcoming atmosphere with menu discovery and a demonstration reservation flow.",
     liveUrl: "https://cafe-bliss-rw.vercel.app",
     repositoryUrl: "https://github.com/byishimwe/Cafe-Bliss",
     rows: [
-      "Translate the warmth of a neighborhood café into a digital experience that's welcoming, clear, and easy to explore.",
-      "Combined editorial typography and warm imagery with intuitive navigation, menu filtering, and a carefully structured reservation interface.",
-      "Kept the project lightweight and entirely frontend-based, with accessible interactions and clearly identified demonstration forms.",
+      "Make a fictional neighborhood café feel welcoming online while helping visitors find its menu and essential information.",
+      "Paired expressive typography and warm photography with straightforward navigation, a filterable menu, and a structured reservation interface.",
+      "Kept the experience lightweight and frontend-only, with accessible interactions and reservation forms presented as demonstrations.",
       "HTML5, CSS3, JavaScript.",
-      "Strong atmosphere comes from deliberate typography, imagery, and spacing—not from adding unnecessary complexity.",
+      "Visual atmosphere depends on typography, spacing, and image selection as much as functionality.",
     ],
   },
   {
@@ -50,15 +50,15 @@ export const projects: Project[] = [
     year: 2026,
     type: "Independent Concept",
     summary:
-      "A bold multi-page website concept for a fictional Kigali training club, combining a distinctive athletic identity with clear, practical information.",
+      "A bold, multi-page website concept for a fictional Kigali training club, built to make its classes, schedule, and membership options easy to explore.",
     liveUrl: "https://imizi-training-club.vercel.app",
     repositoryUrl: "https://github.com/byishimwe/imizi-training-club",
     rows: [
-      "Create a distinctive digital identity for a fictional training club while keeping classes, schedules, and memberships easy to understand.",
-      "Built a consistent multi-page experience around strong typography, clear navigation, reusable components, and a structured weekly timetable.",
-      "Balanced a bold visual identity with responsive usability, while keeping memberships and trial inquiries clearly within the concept's demonstration scope.",
+      "Give a training club a recognizable identity without letting bold visuals obscure schedules, programs, and membership information.",
+      "Created a consistent multi-page system using athletic typography, reusable components, clear navigation, and a weekly class timetable.",
+      "Balanced high-contrast visuals with responsive readability, keeping membership and trial inquiries within a demonstration website.",
       "React, JavaScript, Vite, React Router, Tailwind CSS.",
-      "A memorable identity is most effective when it's supported by clear information architecture and practical interactions.",
+      "Bold branding works best when the information underneath remains easy to navigate and understand.",
     ],
   },
   {
@@ -70,15 +70,15 @@ export const projects: Project[] = [
     year: 2026,
     type: "Application Project",
     summary:
-      "A full-stack student community platform bringing posts, conversations, and shared campus experiences into one connected application.",
+      "A full-stack student community application bringing posts, polls, and conversations together in one connected interface.",
     liveUrl: "https://joinquad.vercel.app",
     repositoryUrl: "https://github.com/byishimwe/quad",
     rows: [
-      "Bring different forms of student interaction into one coherent application without losing clarity as the product grows.",
-      "Built a React and TypeScript frontend with authenticated APIs, structured application state, and Socket.IO-powered communication.",
+      "Bring different forms of student interaction into one application while keeping its interface and architecture manageable.",
+      "Built a React and TypeScript frontend with authenticated application flows, organized state management, and Socket.IO-based communication.",
       "Coordinated authentication, real-time events, media handling, and persistent data while maintaining clear boundaries between the frontend and backend.",
       "React, TypeScript, Express, MongoDB, Clerk, Socket.IO, Zustand.",
-      "Complex applications become easier to evolve when state, data flow, and domain responsibilities are defined clearly.",
+      "As applications grow, clear boundaries between state, data, and features help keep development manageable.",
     ],
   },
 ];

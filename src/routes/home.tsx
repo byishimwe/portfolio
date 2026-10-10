@@ -6,15 +6,15 @@ import { useQuietMotion } from "../hooks/useQuietMotion";
 const services = [
   [
     "Business Websites",
-    "Clear, credible websites that help businesses establish their presence and connect with customers.",
+    "Clear, responsive websites that give businesses a credible home online and make it easier for customers to get in touch.",
   ],
   [
     "Custom Digital Experiences",
-    "Distinctive websites that combine strong visual direction with thoughtful interaction and tailored development.",
+    "Tailored websites that bring visual storytelling, useful interactions, and frontend development together.",
   ],
   [
     "Website Redesigns",
-    "A new direction for existing websites. Stronger structure, clearer communication, and a more considered experience.",
+    "A fresh direction for existing websites, with stronger structure, clearer communication, and easier navigation.",
   ],
 ];
 function ServiceIcon({ index }: { index: number }) {
@@ -61,9 +61,9 @@ export default function Home() {
           </h1>
           <div className="hero-support">
             <p>
-              I design and develop thoughtful websites for businesses and brands
-              — combining strong visual direction, purposeful interaction, and
-              reliable frontend execution.
+              I design and develop websites that help businesses communicate
+              clearly and stand out — combining considered visual design, useful
+              interactions, and reliable frontend development.
             </p>
             <Link className="text-link" to="/#work">
               Explore my work <span aria-hidden="true">→</span>
@@ -119,8 +119,8 @@ export default function Home() {
             <br className="desktop-break" /> your ideas to life.
           </h2>
           <p>
-            From essential business websites to distinctive digital experiences,
-            I help businesses and brands bring their ideas to life online.
+            From a first business website to a more involved digital experience,
+            I shape the design and build around what your project needs.
           </p>
         </div>
         <div className="service-grid" data-reveal>
@@ -146,9 +146,9 @@ export default function Home() {
           </h2>
           <p>
             I'm Prince Arnaud Ishimwe, an independent designer and frontend
-            developer based in Rwanda. I enjoy bringing together visual design
-            and engineering to create websites that feel thoughtful, purposeful,
-            and carefully built.
+            developer based in Rwanda. I bring visual design and code together
+            to build websites with care — from the first impression to the
+            smallest interaction.
           </p>
         </div>
         <AssetSlot name="portrait" className="portrait" />
@@ -159,27 +159,31 @@ export default function Home() {
         aria-labelledby="contact-title"
         data-reveal
       >
-        <p className="eyebrow">Contact</p>
-        <h2 id="contact-title">
-          Have something
-          <br /> worth building?
-        </h2>
-        <p>
-          I'm open to new projects, collaborations,
-          <br className="desktop-break" /> and interesting ideas.
-        </p>
-        <div className="contact-actions">
-          <a
-            className="button"
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Start a Project <span aria-hidden="true">→</span>
-          </a>
-          <a className="text-link" href={emailUrl}>
-            or send an email <span aria-hidden="true">→</span>
-          </a>
+        <div className="contact-heading">
+          <p className="eyebrow">Contact</p>
+          <h2 id="contact-title">
+            Have something
+            <br /> worth building?
+          </h2>
+        </div>
+        <div className="contact-body">
+          <p>
+            Have a website in mind, or an existing one that needs a new
+            direction? I’d love to hear what you’re working on.
+          </p>
+          <div className="contact-actions">
+            <a
+              className="button"
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Start a Project <span aria-hidden="true">→</span>
+            </a>
+            <a className="text-link" href={emailUrl}>
+              or send an email <span aria-hidden="true">→</span>
+            </a>
+          </div>
         </div>
       </section>
     </div>

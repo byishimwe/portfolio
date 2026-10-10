@@ -48,14 +48,10 @@ export function SiteHeader() {
         <Link className="wordmark" to="/" aria-label={`${site.name} — home`}>
           {site.name}
         </Link>
-        <nav className="desktop-nav" aria-label="Primary navigation">
-          {sections.map((section) => (
-            <Link key={section} to={`/#${section.toLowerCase()}`}>
-              {section}
-            </Link>
-          ))}
-        </nav>
         <div className="header-controls">
+          <Link className="header-contact" to="/#contact">
+            Contact <span aria-hidden="true">↗</span>
+          </Link>
           <ThemeToggle />
           <button
             ref={button}
@@ -65,6 +61,7 @@ export function SiteHeader() {
             aria-controls="mobile-navigation"
             onClick={() => setOpen(!open)}
           >
+            <span>Menu</span>
             <svg
               viewBox="0 0 24 24"
               width="22"
@@ -87,7 +84,7 @@ export function SiteHeader() {
         ref={navigation}
         id="mobile-navigation"
         className="mobile-nav"
-        aria-label="Mobile navigation"
+        aria-label="Primary navigation"
         hidden={!open}
       >
         {sections.map((section) => (

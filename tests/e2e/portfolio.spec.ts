@@ -3,6 +3,48 @@ import AxeBuilder from "@axe-core/playwright";
 import { projects } from "../../src/content/projects";
 import { assets, socialImage } from "../../src/config/assets";
 const routes = ["/", ...projects.map((project) => `/work/${project.slug}`)];
+test("editorial menu works at desktop and mobile sizes from every route", async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const route of routes) {
+      for (const label of ["Work", "Services", "About", "Contact"]) {
+        await page.goto(route);
+        const trigger = page.getByRole("button", { name: "Open menu" });
+        await trigger.click();
+        const nav = page.getByRole("navigation", {
+          name: "Primary navigation",
+        });
+        await expect(nav.getByRole("link")).toHaveCount(4);
+        await nav.getByRole("link", { name: label, exact: true }).click();
+        await expect(page).toHaveURL(new RegExp(`#${label.toLowerCase()}$`));
+        await expect(trigger).toHaveAttribute("aria-expanded", "false");
+      }
+    }
+    const menu = page.locator(".menu-button");
+    await menu.focus();
+    await page.keyboard.press("Enter");
+    await page.keyboard.press("Tab");
+    await expect(page.locator(".mobile-nav a").first()).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(menu).toBeFocused();
+    await menu.click();
+    await page.mouse.click(5, 100);
+    await expect(menu).toHaveAttribute("aria-expanded", "false");
+    await expect(page.locator(".mobile-nav")).toBeHidden();
+    await expect(page.locator(".header-contact")).toHaveAttribute(
+      "href",
+      "/#contact",
+    );
+    if (width === 1440) {
+      await page.locator(".header-contact").click();
+      await expect(page).toHaveURL(/#contact$/);
+    } else await expect(page.locator(".header-contact")).toBeHidden();
+  }
+});
 test("minimal structure, accurate case copy and external actions", async ({
   page,
   request,
@@ -117,8 +159,9 @@ test("real sequence, route focus, anchors, browser Back and scroll restoration",
     ["Contact", "contact"],
   ]) {
     await page.goto("/work/cafe-bliss");
+    await page.locator(".menu-button").click();
     await page
-      .locator(".desktop-nav")
+      .locator(".mobile-nav")
       .getByRole("link", { name: label, exact: true })
       .click();
     await expect(page).toHaveURL(new RegExp(`#${id}$`));
@@ -228,6 +271,17 @@ test("responsive composition in both themes and rendered screenshots", async ({
           ),
         ).toBe(true);
         if (route === "/") {
+          if (viewport.width > 800) {
+            const frame = await page.locator(".hero-visual").boundingBox();
+            expect(frame!.y + frame!.height).toBeLessThan(viewport.height);
+          }
+          const portrait = await page.locator(".portrait").boundingBox();
+          expect(portrait!.height).toBeLessThanOrEqual(370);
+          const selection = await page.locator("h1").evaluate((el) => {
+            const style = getComputedStyle(el, "::selection");
+            return [style.backgroundColor, style.color];
+          });
+          expect(selection[0]).not.toBe(selection[1]);
           const lines = await page
             .locator(".hero-line")
             .evaluateAll((elements) =>
