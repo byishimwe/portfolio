@@ -32,9 +32,9 @@ No pinned gallery, ScrollTrigger controller, shared-image route controller, supp
 
 ## Imagery
 
-The three owner-supplied project images are active as optimized WebP files. The hero visual and authentic portrait remain pending; their neutral slots reserve the composition without broken requests. Supply files directly in `public/` and activate their entries in the asset map. Each project uses the same source for its cropped work preview and complete case-study image. `/images/` stays ignored and untouched. No reference mockup is displayed as a production asset.
+All five owner-supplied images are active as WebP files, including the hero and About portrait. Files live directly in `public/` and are configured in the asset map. Each project uses the same source for its cropped work preview and complete case-study image. `/images/` stays ignored and untouched. No reference mockup is displayed as a production asset.
 
-Follow [ASSET_REPLACEMENT.md](ASSET_REPLACEMENT.md). Approved sharing artwork is also pending; outdated social screenshots are removed and no image metadata is fabricated.
+Follow [ASSET_REPLACEMENT.md](ASSET_REPLACEMENT.md). The supplied sharing artwork is optimized as `public/sharing.webp` and included in initial HTML and route metadata, with its actual dimensions.
 
 ## References, content and launch
 

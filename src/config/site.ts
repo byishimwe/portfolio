@@ -1,3 +1,5 @@
+import { socialImageDimensions } from "./assets";
+
 export const site = {
   name: "Prince Arnaud Ishimwe",
   role: "Designer & Frontend Developer",
@@ -29,8 +31,14 @@ export function metadata(
     ...(image
       ? [
           { property: "og:image", content: `${site.origin}${image}` },
-          { property: "og:image:width", content: "1200" },
-          { property: "og:image:height", content: "630" },
+          {
+            property: "og:image:width",
+            content: String(socialImageDimensions.width),
+          },
+          {
+            property: "og:image:height",
+            content: String(socialImageDimensions.height),
+          },
         ]
       : []),
     {

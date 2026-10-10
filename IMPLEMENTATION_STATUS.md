@@ -12,8 +12,8 @@ The current owner brief replaces the obsolete Living Frame design. The homepage 
 | Light/dark/system themes, saved choice and pre-paint setup                     | Implemented                                                         |
 | Quiet hero/reveal/hover/case entrances and reduced motion                      | Implemented                                                         |
 | SPA routes, tooling, contact configuration and deployment fallback             | Preserved                                                           |
-| Hero visual and authentic portrait                                             | Pending owner assets                                                |
-| Approved sharing artwork                                                       | Pending                                                             |
+| Hero visual and authentic portrait                                             | Installed from owner-supplied files                                 |
+| Approved sharing artwork                                                       | Installed as optimized WebP                                         |
 | Approved homepage mockup                                                       | Not present in the supplied reference set; exact written brief used |
 | Public deployment                                                              | Not performed                                                       |
 

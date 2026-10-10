@@ -31,13 +31,13 @@ All four content routes were checked in both themes at 1440×900, 1366×768, 128
 
 Sixteen full-page screenshots were generated at desktop 1440px and mobile 390px in light and dark themes, under ignored `tmp/redesign-qa/`. Representative homepage, Café Bliss, IMIZI and Quad images were opened and inspected. Review covered type hierarchy, foreground consistency, preview dimensions, service alignment, About text/portrait composition, contact simplicity, case-row legibility and real pagination. The supplied Café Bliss light/dark desktop/mobile reference was compared structurally; intentional differences correct inaccurate stack labels, extra metadata and fictional navigation, and reserve neutral owner-image slots.
 
-No approved homepage image was included in the supplied set or existing repository. A matching Downloads candidate was inspected and owner confirmation requested; homepage acceptance currently rests on the exact written brief. Final visual review with the approved homepage mockup and actual imagery remains outstanding.
+No approved homepage image was included in the supplied set or existing repository. A matching Downloads candidate was inspected and owner confirmation requested; homepage acceptance currently rests on the exact written brief. Final visual review with the approved homepage mockup remains outstanding; the supplied imagery was subsequently installed and checked as recorded below.
 
-Eight Axe scans—four routes in both themes—report zero WCAG 2 A/AA and WCAG 2.1 AA violations. This is an automated result, not accessibility certification. Final imagery will need another visual/accessibility pass.
+Eight Axe scans—four routes in both themes—report zero WCAG 2 A/AA and WCAG 2.1 AA violations. This is an automated result, not accessibility certification. The subsequent asset activation pass is recorded below.
 
 ## Remaining input and limits
 
-The three project images are supplied and active as optimized WebP. The hero visual, authentic portrait, and sharing artwork remain pending. Tests automatically follow the asset map when files are activated. No final-asset completion is claimed. Personal Lesson Learned copy comes from the supplied brief and remains subject to final owner editorial review.
+All five image slots and the sharing artwork are supplied and active as WebP. Tests automatically follow the asset map when files are activated. The supplied assets are installed; final owner acceptance remains pending. Personal Lesson Learned copy comes from the supplied brief and remains subject to final owner editorial review.
 
 The Vite SPA retains the documented initial-HTML and social-sharing limits: project content/metadata require JavaScript, unknown-route fallback has HTTP 200, and full no-JavaScript navigation is unavailable. The honest no-JavaScript email fallback passes. No production origin, public deployment, social-preview cache verification, Firefox/WebKit, physical-device or screen-reader verification is claimed.
 
@@ -46,3 +46,11 @@ Local implementation and technical checks are complete; final mockup/asset accep
 ## Project image activation
 
 The owner-supplied PNGs were converted at WebP quality 92/method 6, without resizing. Each output decodes at 1672×941, matching the updated asset map. Combined size falls from 5,695,501 to 650,456 bytes (88.6% smaller). The original PNGs are preserved in ignored `tmp/project-image-originals/`; only the WebP files ship in public output. The same file is used for each cropped preview and complete case-study image. The existing asset-aware browser suite checks decoding and missing requests in both themes, across the responsive viewport matrix.
+
+## Remaining image activation — 10 October 2026
+
+Hero and sharing PNGs were converted at WebP quality 92/method 6, retaining 1122×1402 and 1734×907 dimensions respectively. Combined size is 665,624 bytes, 86.3% smaller than the PNGs. Originals remain in ignored `tmp/remaining-image-originals/`. The 113,468-byte portrait WebP is used unchanged. The hero, About portrait, and shared social metadata now use the supplied files.
+
+`npm run check` passed TypeScript, ESLint, six unit tests, and the production build. All eight Chrome Playwright tests passed, including image decoding, eight Axe scans, interactions, animations, and the 72-page responsive matrix. The first matrix run exceeded its default 30-second total test limit; its explicit budget is now 90 seconds, and the complete matrix passed in 37.6 seconds. Assertions and viewport coverage are unchanged. Prettier, ESLint for the updated test, and Git whitespace checks passed.
+
+Fresh desktop and mobile homepage screenshots in both themes were inspected for hero composition, portrait framing, and preserved layout. Initial HTML sharing-image URL, actual dimensions, and large-image Twitter card were verified in both unconfigured and reserved-origin builds. The configured build also retains canonical, sitemap, and robots output. PNG sources are excluded from production output, and `/images/` remains ignored.

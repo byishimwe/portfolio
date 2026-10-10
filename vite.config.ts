@@ -2,7 +2,7 @@ import { defineConfig, loadEnv, type Plugin } from "vite";
 import fs from "node:fs";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-import { socialImage } from "./src/config/assets";
+import { socialImage, socialImageDimensions } from "./src/config/assets";
 export default defineConfig(({ mode }) => {
   // Only the public origin is read. No server variables are injected into JS.
   const configured = loadEnv(
@@ -14,7 +14,6 @@ export default defineConfig(({ mode }) => {
   const publicSeo: Plugin = {
     name: "public-spa-seo",
     transformIndexHtml(html) {
-      if (!origin) return html;
       return {
         html,
         tags: [
@@ -29,26 +28,41 @@ export default defineConfig(({ mode }) => {
                   },
                   injectTo: "head" as const,
                 },
+                ...Object.entries(socialImageDimensions).map(
+                  ([dimension, value]) => ({
+                    tag: "meta",
+                    attrs: {
+                      "data-route-meta": "",
+                      property: `og:image:${dimension}`,
+                      content: String(value),
+                    },
+                    injectTo: "head" as const,
+                  }),
+                ),
               ]
             : []),
-          {
-            tag: "link",
-            attrs: {
-              "data-route-meta": "",
-              rel: "canonical",
-              href: `${origin}/`,
-            },
-            injectTo: "head",
-          },
-          {
-            tag: "meta",
-            attrs: {
-              "data-route-meta": "",
-              property: "og:url",
-              content: `${origin}/`,
-            },
-            injectTo: "head",
-          },
+          ...(origin
+            ? [
+                {
+                  tag: "link",
+                  attrs: {
+                    "data-route-meta": "",
+                    rel: "canonical",
+                    href: `${origin}/`,
+                  },
+                  injectTo: "head" as const,
+                },
+                {
+                  tag: "meta",
+                  attrs: {
+                    "data-route-meta": "",
+                    property: "og:url",
+                    content: `${origin}/`,
+                  },
+                  injectTo: "head" as const,
+                },
+              ]
+            : []),
         ],
       };
     },

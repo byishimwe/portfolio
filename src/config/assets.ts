@@ -7,18 +7,18 @@ export interface PortfolioAsset {
   height: number;
   position: string;
 }
-// Supply final files directly in public/, then set src to expectedPath.
+// Owner-supplied images live directly in public/.
 export const assets: Record<AssetKey, PortfolioAsset> = {
   hero: {
-    src: null,
+    src: "/hero.webp",
     expectedPath: "/hero.webp",
-    alt: "Featured design and development work",
-    width: 1200,
-    height: 1500,
+    alt: "Website wireframes and design sketches on a sunlit desk",
+    width: 1122,
+    height: 1402,
     position: "50% 50%",
   },
   portrait: {
-    src: null,
+    src: "/portrait.webp",
     expectedPath: "/portrait.webp",
     alt: "Prince Arnaud Ishimwe",
     width: 1000,
@@ -50,5 +50,5 @@ export const assets: Record<AssetKey, PortfolioAsset> = {
     position: "50% 40%",
   },
 };
-// Supply approved 1200×630 sharing artwork; do not reuse obsolete portfolio previews.
-export const socialImage: string | null = null;
+export const socialImage: string | null = "/sharing.webp";
+export const socialImageDimensions = { width: 1734, height: 907 };

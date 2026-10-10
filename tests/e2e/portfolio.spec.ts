@@ -201,6 +201,8 @@ test("system theme, pre-paint saved preference, persistence and unavailable stor
 test("responsive composition in both themes and rendered screenshots", async ({
   page,
 }) => {
+  // This test visits 72 pages and captures 16 full-page screenshots.
+  test.setTimeout(90_000);
   await page.emulateMedia({ reducedMotion: "reduce" });
   for (const theme of ["light", "dark"] as const) {
     for (const viewport of [
