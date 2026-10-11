@@ -7,15 +7,15 @@ import { useQuietMotion } from "../hooks/useQuietMotion";
 const services = [
   [
     "Business Websites",
-    "A clear home for your business online, with the pages, information, and contact options your customers need.",
+    "A professional website that clearly explains what you offer and makes it easy for customers to get in touch.",
   ],
   [
-    "Custom Digital Experiences",
-    "Distinctive websites with purposeful motion and interaction, designed around your brand and the story you want to tell.",
+    "Custom Web Experiences",
+    "Distinctive websites with purposeful motion and interaction, designed to express your brand without sacrificing clarity or usability.",
   ],
   [
     "Website Redesigns",
-    "A better experience for an existing website: clearer content, easier navigation, and a layout that works across devices.",
+    "Improve your existing website with clearer content, easier navigation, and a responsive design that works across devices.",
   ],
 ];
 function ServiceIcon({ index }: { index: number }) {
@@ -149,9 +149,9 @@ export default function Home() {
             <br /> Or a better one.
           </h2>
           <p>
-            From your first website to a custom brand experience, I handle the
-            design and frontend development around your goals, content, and
-            budget.
+            From your first website to a more distinctive, interactive
+            experience, I handle both design and frontend development with your
+            goals and customers in mind.
           </p>
         </div>
         <div className="service-grid" data-reveal>
@@ -177,10 +177,10 @@ export default function Home() {
           </h2>
           <p>
             I’m Prince Arnaud Ishimwe. I work across visual design and frontend
-            development, connecting how a website looks with how it feels to
-            use. I care about clear structure, thoughtful typography, and
-            interactions that feel natural, from the first impression to the
-            final detail.
+            development, thinking about how a website looks, how it works, and
+            how it feels to use. I focus on clear structure, thoughtful
+            typography, and interactions that feel natural, down to the smallest
+            details.
           </p>
         </div>
         <AssetSlot name="portrait" className="portrait" />
@@ -208,9 +208,9 @@ export default function Home() {
         </div>
         <div className="contact-body">
           <p>
-            Need a new website or a fresh direction for your current one? Tell
-            me about your business, what you need, and when you’d like to
-            launch. We can work out the next step together.
+            Have a project in mind? Tell me about your business, what you’d like
+            to build or improve, and when you’re hoping to launch. We can figure
+            out the next step together.
           </p>
           <a
             className="text-link contact-gmail"
