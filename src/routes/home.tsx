@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { projects } from "../content/projects";
 import { AssetSlot } from "../components/AssetSlot";
-import { emailUrl, gmailUrl, site, whatsappUrl } from "../config/site";
+import { gmailUrl, site, whatsappUrl } from "../config/site";
 import { useQuietMotion } from "../hooks/useQuietMotion";
 const services = [
   [
@@ -220,9 +220,6 @@ export default function Home() {
               >
                 {copying ? "Copying…" : "Copy email address"}
               </button>
-              <a className="email-option" href={emailUrl}>
-                Use email app <span aria-hidden="true">↗</span>
-              </a>
             </div>
             <p
               className="copy-status"

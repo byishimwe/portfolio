@@ -11,7 +11,6 @@ export const site = {
 };
 export const whatsappUrl = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Hi Prince, I’d like to discuss a website project.")}`;
 const emailSubject = "Website project enquiry";
-export const emailUrl = `mailto:${site.email}?subject=${encodeURIComponent(emailSubject)}`;
 export const gmailUrl = `https://mail.google.com/mail/?${new URLSearchParams({
   view: "cm",
   fs: "1",

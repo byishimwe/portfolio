@@ -333,9 +333,10 @@ test("keyboard mobile menu, modified links and confirmed contacts", async ({
   await expect(
     page.getByRole("link", { name: "Chat on WhatsApp" }),
   ).toHaveAttribute("href", /wa\.me\/250795198946/);
+  await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
   await expect(
-    page.getByRole("link", { name: "Use email app" }),
-  ).toHaveAttribute("href", /^mailto:princeishimwe754@gmail\.com/);
+    page.locator("#contact").getByRole("link", { name: "Email via Gmail" }),
+  ).toHaveAttribute("href", /^https:\/\/mail\.google\.com\/mail\//);
   await page.goto("/");
   await page.evaluate(() =>
     document.addEventListener(
@@ -454,9 +455,10 @@ test("no-JavaScript fallback remains honest and retains email", async ({
   const page = await context.newPage();
   await page.goto("/");
   await expect(page.locator("h1")).toHaveText("Enable JavaScript to explore.");
+  await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
   await expect(
-    page.getByRole("link", { name: "Use email app" }),
-  ).toHaveAttribute("href", "mailto:princeishimwe754@gmail.com");
+    page.getByText("princeishimwe754@gmail.com", { exact: true }),
+  ).toBeVisible();
   await expect(
     page.getByRole("link", { name: "Email via Gmail" }),
   ).toHaveAttribute("href", /^https:\/\/mail\.google\.com\/mail\//);
