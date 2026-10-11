@@ -197,6 +197,14 @@ export default function Home() {
             Let’s talk about
             <br /> your website.
           </h2>
+          <a
+            className="button contact-whatsapp"
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Chat on WhatsApp <span aria-hidden="true">→</span>
+          </a>
         </div>
         <div className="contact-body">
           <p>
@@ -204,24 +212,14 @@ export default function Home() {
             me about your business, what you need, and when you’d like to
             launch. We can work out the next step together.
           </p>
-          <div className="contact-actions">
-            <a
-              className="button"
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Chat on WhatsApp <span aria-hidden="true">→</span>
-            </a>
-            <a
-              className="text-link"
-              href={gmailUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Email via Gmail <span aria-hidden="true">↗</span>
-            </a>
-          </div>
+          <a
+            className="text-link contact-gmail"
+            href={gmailUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Email via Gmail <span aria-hidden="true">↗</span>
+          </a>
           <div className="contact-email">
             <span className="email-address">{site.email}</span>
             <div className="email-options">
