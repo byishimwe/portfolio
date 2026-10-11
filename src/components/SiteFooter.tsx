@@ -1,4 +1,4 @@
-import { site, emailUrl } from "../config/site";
+import { site, gmailUrl } from "../config/site";
 export function SiteFooter() {
   return (
     <footer className="container site-footer">
@@ -13,7 +13,9 @@ export function SiteFooter() {
         >
           GitHub
         </a>
-        <a href={emailUrl}>Email</a>
+        <a href={gmailUrl} target="_blank" rel="noopener noreferrer">
+          Email via Gmail
+        </a>
       </div>
     </footer>
   );

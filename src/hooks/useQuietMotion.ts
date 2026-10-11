@@ -24,9 +24,14 @@ export function useQuietMotion(page: "home" | "project") {
             0.08,
           )
           .from(
-            select(".hero-support"),
+            select(".hero-support > p"),
             { autoAlpha: 0, y: 10, duration: 0.45 },
             0.32,
+          )
+          .from(
+            select(".hero-support > .text-link"),
+            { autoAlpha: 0, y: 8, duration: 0.4 },
+            0.46,
           )
           .from(
             select(".hero-visual"),

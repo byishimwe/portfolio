@@ -1,20 +1,21 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { projects } from "../content/projects";
 import { AssetSlot } from "../components/AssetSlot";
-import { emailUrl, site, whatsappUrl } from "../config/site";
+import { gmailUrl, site, whatsappUrl } from "../config/site";
 import { useQuietMotion } from "../hooks/useQuietMotion";
 const services = [
   [
     "Business Websites",
-    "Clear, responsive websites that give businesses a credible home online and make it easier for customers to get in touch.",
+    "A professional website that clearly explains what you offer and makes it easy for customers to get in touch.",
   ],
   [
-    "Custom Digital Experiences",
-    "Tailored websites that bring visual storytelling, useful interactions, and frontend development together.",
+    "Custom Web Experiences",
+    "Distinctive websites with purposeful motion and interaction, designed to express your brand without sacrificing clarity or usability.",
   ],
   [
     "Website Redesigns",
-    "A fresh direction for existing websites, with stronger structure, clearer communication, and easier navigation.",
+    "Improve your existing website with clearer content, easier navigation, and a responsive design that works across devices.",
   ],
 ];
 function ServiceIcon({ index }: { index: number }) {
@@ -48,6 +49,34 @@ function ServiceIcon({ index }: { index: number }) {
   );
 }
 export default function Home() {
+  const [copyStatus, setCopyStatus] = useState("");
+  const [copying, setCopying] = useState(false);
+  const copyTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(
+    () => () => {
+      if (copyTimeout.current !== null) clearTimeout(copyTimeout.current);
+    },
+    [],
+  );
+  async function copyEmail() {
+    if (copyTimeout.current !== null) clearTimeout(copyTimeout.current);
+    setCopying(true);
+    setCopyStatus("");
+    try {
+      await navigator.clipboard.writeText(site.email);
+      setCopyStatus("Email address copied.");
+      copyTimeout.current = setTimeout(() => {
+        setCopyStatus("");
+        copyTimeout.current = null;
+      }, 3000);
+    } catch {
+      setCopyStatus(
+        "Couldn’t copy automatically. Select the email address above to copy it.",
+      );
+    } finally {
+      setCopying(false);
+    }
+  }
   const scope = useQuietMotion("home");
   return (
     <div ref={scope} className="container homepage" id="top">
@@ -55,15 +84,16 @@ export default function Home() {
         <div className="hero-copy">
           <p className="eyebrow hero-label">Designer & Frontend Developer</p>
           <h1 id="hero-title" tabIndex={-1}>
-            <span className="hero-line">Digital experiences</span>
-            <span className="hero-line">built to be</span>
-            <em className="hero-line">remembered.</em>
+            <span className="hero-line">Websites built</span>
+            <span className="hero-line">around your</span>
+            <em className="hero-line">business.</em>
           </h1>
           <div className="hero-support">
             <p>
-              I design and develop websites that help businesses communicate
-              clearly and stand out — combining considered visual design, useful
-              interactions, and reliable frontend development.
+              I’m Prince, an independent designer and frontend developer based
+              in Rwanda. I create thoughtful websites that reflect your brand,
+              communicate what you offer, and make it easy for customers to
+              connect with you.
             </p>
             <Link className="text-link" to="/#work">
               Explore my work <span aria-hidden="true">→</span>
@@ -115,12 +145,13 @@ export default function Home() {
         <div className="section-introduction" data-reveal>
           <p className="eyebrow">What I Do</p>
           <h2 id="services-title">
-            Three ways to help bring
-            <br className="desktop-break" /> your ideas to life.
+            A new website.
+            <br /> Or a better one.
           </h2>
           <p>
-            From a first business website to a more involved digital experience,
-            I shape the design and build around what your project needs.
+            From your first website to a more distinctive, interactive
+            experience, I handle both design and frontend development with your
+            goals and customers in mind.
           </p>
         </div>
         <div className="service-grid" data-reveal>
@@ -142,13 +173,14 @@ export default function Home() {
         <div className="about-copy" data-reveal-item>
           <p className="eyebrow">About Me</p>
           <h2 id="about-title">
-            A designer and developer who cares about the details.
+            Design and development, with the same attention to detail.
           </h2>
           <p>
-            I'm Prince Arnaud Ishimwe, an independent designer and frontend
-            developer based in Rwanda. I bring visual design and code together
-            to build websites with care — from the first impression to the
-            smallest interaction.
+            I’m Prince Arnaud Ishimwe. I work across visual design and frontend
+            development, thinking about how a website looks, how it works, and
+            how it feels to use. I focus on clear structure, thoughtful
+            typography, and interactions that feel natural, down to the smallest
+            details.
           </p>
         </div>
         <AssetSlot name="portrait" className="portrait" />
@@ -159,32 +191,57 @@ export default function Home() {
         aria-labelledby="contact-title"
         data-reveal
       >
+        <p className="eyebrow contact-label">Contact</p>
         <div className="contact-heading">
-          <p className="eyebrow">Contact</p>
           <h2 id="contact-title">
-            Have something
-            <br /> worth building?
+            Let’s talk about
+            <br /> your website.
           </h2>
+          <a
+            className="button contact-whatsapp"
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Chat on WhatsApp <span aria-hidden="true">→</span>
+          </a>
         </div>
         <div className="contact-body">
           <p>
-            Have a website in mind, or an existing one that needs a new
-            direction? I’d love to hear what you’re working on.
+            Have a project in mind? Tell me about your business, what you’d like
+            to build or improve, and when you’re hoping to launch. We can figure
+            out the next step together.
           </p>
-          <div className="contact-actions">
-            <a
-              className="button"
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Chat on WhatsApp <span aria-hidden="true">→</span>
-            </a>
-            <a className="text-link" href={emailUrl}>
-              {site.email} <span aria-hidden="true">→</span>
-            </a>
+          <a
+            className="text-link contact-gmail"
+            href={gmailUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Email via Gmail <span aria-hidden="true">↗</span>
+          </a>
+          <div className="contact-email">
+            <span className="email-address">{site.email}</span>
+            <div className="email-options">
+              <button
+                type="button"
+                className="email-option"
+                onClick={copyEmail}
+                disabled={copying}
+              >
+                {copying ? "Copying…" : "Copy email address"}
+              </button>
+            </div>
           </div>
         </div>
+        <p
+          className="copy-status"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {copyStatus}
+        </p>
       </section>
     </div>
   );

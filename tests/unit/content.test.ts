@@ -10,7 +10,7 @@ import {
 import { assets, socialImage } from "../../src/config/assets";
 import fs from "node:fs";
 import { AssetSlot } from "../../src/components/AssetSlot";
-import { site, whatsappUrl, emailUrl, metadata } from "../../src/config/site";
+import { site, whatsappUrl, gmailUrl, metadata } from "../../src/config/site";
 import { routeMetadata } from "../../src/config/routeMetadata";
 describe("approved portfolio content", () => {
   it("preserves real project order and non-circular navigation", () => {
@@ -52,7 +52,7 @@ describe("approved portfolio content", () => {
   it("preserves confirmed identity and contacts", () => {
     expect(site.name).toBe("Prince Arnaud Ishimwe");
     expect(new URL(whatsappUrl).pathname).toBe("/250795198946");
-    expect(emailUrl).toContain("mailto:princeishimwe754@gmail.com");
+    expect(new URL(gmailUrl).searchParams.get("to")).toBe(site.email);
   });
   it("reserves honest neutral slots without requesting missing files", () => {
     for (const [name, asset] of Object.entries(assets)) {
