@@ -1,45 +1,95 @@
 # Prince Arnaud Ishimwe — Portfolio
 
-A minimal portfolio for a Designer & Frontend Developer based in Rwanda. The current redesign brief replaces the historical Living Frame specifications in `docs/`.
+Personal portfolio of an independent designer and frontend developer based in Rwanda. The website showcases selected projects, services, background, and ways to get in touch.
 
-## Development
+## Live website
 
-Node.js 22.12+ or 24 and npm:
+**[princeishimwe.vercel.app](https://princeishimwe.vercel.app)** — currently hosted on Vercel.
+
+## Featured projects
+
+1. **Café Bliss** — a fictional hospitality website concept.
+2. **IMIZI Training Club** — a fictional fitness website concept.
+3. **Quad** — a full-stack student community application.
+
+Each project has a dedicated case study with its approach, constraints, technical stack, and links to the live project and repository. Concept reservation and inquiry flows are demonstrations.
+
+## Tech stack
+
+- React 19 and TypeScript 5
+- Vite 7 and React Router 7 in declarative SPA mode
+- Tailwind CSS 4
+- GSAP 3 with `@gsap/react` 2
+- DM Sans and Instrument Serif, served locally through Fontsource
+- Vitest, Playwright with Axe, ESLint, and Prettier
+
+## Features
+
+- Responsive layouts and three compact project previews
+- System-aware light/dark themes with saved user preference
+- Compact keyboard-accessible navigation with Escape and outside-click dismissal
+- Three dedicated case studies with previous/next navigation
+- Subtle entrances and hover transitions, with reduced-motion support
+- WhatsApp and email contact actions
+- Route-specific titles, descriptions, and social-sharing metadata
+- Optimized WebP imagery and a transparent, theme-aware SVG favicon
+
+## Getting started
+
+Use Node.js 22.12+ or 24 and npm.
 
 ```sh
+git clone https://github.com/byishimwe/portfolio.git
+cd portfolio
 npm ci
-npm run dev         # Vite, port 5173
-npm run check       # TypeScript, ESLint, Vitest, production build
-npm run preview     # dist/, port 4173
-npm run test:e2e    # build first; fresh production preview
+npm run dev
 ```
 
-Install Chromium with `npx playwright install chromium`, or on Windows use `$env:PLAYWRIGHT_CHANNEL='chrome'` for installed Chrome. `PLAYWRIGHT_REUSE_SERVER=1` explicitly allows test-server reuse. `npm run typecheck`, `npm run lint`, and `npm test` also work independently. Format with Prettier.
+Vite serves the development site at `http://localhost:5173` by default.
 
-## Architecture
+```sh
+npm run build       # TypeScript checks and production output in dist/
+npm run preview     # Local production preview, port 4173 by default
+```
 
-React 19, TypeScript, Vite, Tailwind CSS 4, DM Sans, Instrument Serif, GSAP and @gsap/react. Simple declarative React Router routes: `/`, `/work/cafe-bliss`, `/work/imizi`, `/work/quad`, and a catch-all not-found screen. No backend, framework mode, service routes, or separate About page.
+### Checks
 
-- `src/components`: shared navigation, footer, metadata, and image slots.
-- `src/features/theme`: system-aware light/dark theme with persistent explicit choice; `index.html` chooses the theme before painting.
-- `src/features/navigation`: hash offsets, history scroll restoration, and route-heading focus.
-- `src/hooks/useQuietMotion.ts`: scoped GSAP entrances and one-time IntersectionObserver reveals; reduced motion renders content immediately. CSS owns hover/focus/theme transitions.
-- `src/config/assets.ts`: the five image slots and optional sharing image.
-- `src/content/projects.ts`: source-checked concise copy, real destinations, and non-circular previous/next navigation.
-- `src/styles/global.css`: monochrome design tokens and responsive composition.
+```sh
+npm run check       # TypeScript, ESLint, unit tests, production build
+npx playwright install chromium
+npm run test:e2e    # Run after building; starts a production preview
+npx prettier --check README.md src tests *.ts *.js *.json index.html
+```
 
-No pinned gallery, ScrollTrigger controller, shared-image route controller, supporting image collections, or generated imagery remains. The project uses ordinary route changes with quiet heading/image entrances.
+On Windows, installed Chrome can be used with `$env:PLAYWRIGHT_CHANNEL='chrome'` before running E2E tests. Stop an existing preview first, or explicitly opt into reuse with `$env:PLAYWRIGHT_REUSE_SERVER='1'`. Individual checks are available through `npm run typecheck`, `npm run lint`, and `npm test`.
 
-## Imagery
+## Configuration
 
-All five owner-supplied images are active as WebP files, including the hero and About portrait. Files live directly in `public/` and are configured in the asset map. Each project uses the same source for its cropped work preview and complete case-study image. `/images/` stays ignored and untouched. No reference mockup is displayed as a production asset.
+Copy `.env.example` to `.env` for local configuration. `VITE_SITE_URL` is the public website origin, without a path or trailing slash:
 
-Follow [ASSET_REPLACEMENT.md](ASSET_REPLACEMENT.md). The supplied sharing artwork is optimized as `public/sharing.webp` and included in initial HTML and route metadata, with its actual dimensions.
+```dotenv
+VITE_SITE_URL=https://princeishimwe.vercel.app
+```
 
-## References, content and launch
+It generates canonical URLs, sitemap URLs, the robots sitemap reference, and absolute social-sharing image URLs. Set it in the hosting environment before building. When moving to a custom domain, update this variable and rebuild. Never put secrets in `VITE_` variables: they are exposed to the browser.
 
-The attached approved Café Bliss theme mockup is saved in `design-reference/`. Its generated technology labels and fictional navigation names are corrected by the owner's brief. The homepage implementation follows the exact written structure; the missing approved homepage reference is tracked in `design-reference/README.md`.
+The portfolio is client-rendered. Initial HTML contains homepage metadata; case-specific metadata requires JavaScript. Unknown routes display a recovery page and client-side `noindex`, while the SPA fallback returns HTTP 200. Route-specific sharing for crawlers that do not execute JavaScript would require prerendering or route-aware hosting responses.
 
-Project facts are recorded in [CONTENT_SOURCES.md](CONTENT_SOURCES.md). Email and WhatsApp retain the owner's confirmed destinations; LinkedIn is omitted because no verified URL is configured.
+Project copy and destinations live in `src/content/projects.ts`; identity and contact settings are in `src/config/site.ts`. Images live directly in `public/`, with paths, alternative text, intrinsic dimensions, and sharing-image dimensions maintained in `src/config/assets.ts`. Project previews and case studies share their source images. The local `/images/` library is Git-ignored.
 
-`VITE_SITE_URL` is optional public-origin configuration; VITE-prefixed variables must never hold secrets. The configured build supplies canonical URLs, sitemap and robots output. This client-rendered SPA has initial homepage metadata; project metadata requires JavaScript. See [DEPLOYMENT.md](DEPLOYMENT.md), [QA_REPORT.md](QA_REPORT.md), and [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md). No production domain is invented and no public deployment is claimed.
+## Deployment
+
+The portfolio is deployed on Vercel with deployments linked to GitHub. The repository's `vercel.json` specifies:
+
+| Setting              | Value                                       |
+| -------------------- | ------------------------------------------- |
+| Framework            | Vite                                        |
+| Build command        | `npm run build`                             |
+| Output directory     | `dist`                                      |
+| SPA routing fallback | Rewrite application routes to `/index.html` |
+
+Keep `VITE_SITE_URL` aligned with the public origin. Pushing or merging to the connected production branch may trigger a deployment.
+
+## License and assets
+
+No license is specified for this repository. Supplied photography and portfolio presentation assets are not automatically licensed for reuse.
