@@ -30,7 +30,7 @@ Each project has a dedicated case study with its approach, constraints, technica
 - Compact keyboard-accessible navigation with Escape and outside-click dismissal
 - Three dedicated case studies with previous/next navigation
 - Subtle entrances and hover transitions, with reduced-motion support
-- WhatsApp and email contact actions
+- Explicit WhatsApp and Gmail contact actions, with a selectable email address, clipboard feedback, and an email-app alternative
 - Route-specific titles, descriptions, and social-sharing metadata
 - Optimized WebP imagery and a transparent, theme-aware SVG favicon
 
@@ -76,6 +76,8 @@ It generates canonical URLs, sitemap URLs, the robots sitemap reference, and abs
 The portfolio is client-rendered. Initial HTML contains homepage metadata; case-specific metadata requires JavaScript. Unknown routes display a recovery page and client-side `noindex`, while the SPA fallback returns HTTP 200. Route-specific sharing for crawlers that do not execute JavaScript would require prerendering or route-aware hosting responses.
 
 Project copy and destinations live in `src/content/projects.ts`; identity and contact settings are in `src/config/site.ts`. Images live directly in `public/`, with paths, alternative text, intrinsic dimensions, and sharing-image dimensions maintained in `src/config/assets.ts`. Project previews and case studies share their source images. The local `/images/` library is Git-ignored.
+
+The primary email action opens Gmail in a new tab with the recipient and subject filled in; visitors may need to sign into Gmail. Visitors using other services can copy the visible address or choose **Use email app**, which relies on their configured `mailto:` handler. Copy failures leave the address selectable and announce manual-copy instructions. No email is sent by the portfolio. The no-JavaScript contact links in `index.html` must also be kept aligned when changing the contact address.
 
 ## Deployment
 

@@ -5,7 +5,7 @@ export function routeMetadata(pathname: string): MetadataTag[] {
   if (pathname === "/")
     return metadata(
       `${site.name} — Designer & Frontend Developer`,
-      "An independent designer and frontend developer in Rwanda, creating thoughtful websites and digital experiences for businesses and brands.",
+      "Independent web design and frontend development in Rwanda. Business websites, custom brand experiences, and website redesigns by Prince Arnaud Ishimwe.",
       "/",
       socialImage,
     );

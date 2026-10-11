@@ -10,7 +10,14 @@ export const site = {
   origin: import.meta.env.VITE_SITE_URL?.replace(/\/$/, "") || "",
 };
 export const whatsappUrl = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Hi Prince, I’d like to discuss a website project.")}`;
-export const emailUrl = `mailto:${site.email}?subject=${encodeURIComponent("Let’s build something thoughtful")}`;
+const emailSubject = "Website project enquiry";
+export const emailUrl = `mailto:${site.email}?subject=${encodeURIComponent(emailSubject)}`;
+export const gmailUrl = `https://mail.google.com/mail/?${new URLSearchParams({
+  view: "cm",
+  fs: "1",
+  to: site.email,
+  su: emailSubject,
+})}`;
 export type MetadataTag =
   | { title: string }
   | { name: string; content: string }

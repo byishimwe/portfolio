@@ -444,7 +444,7 @@ img {
 .contact-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 32px;
+  gap: 12px 24px;
   align-items: center;
   margin-top: 26px;
 }
@@ -956,4 +956,44 @@ img {
   .hero-visual img {
     object-position: 50% 50%;
   }
+}
+
+.contact-email {
+  margin-top: 22px;
+  font-size: 13px;
+}
+.email-address {
+  display: block;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+.email-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+}
+.email-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 0;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-size: 12px;
+}
+.email-option:hover {
+  color: var(--foreground);
+}
+.email-option:disabled {
+  cursor: progress;
+}
+.copy-status {
+  font-size: 12px;
+}
+.copy-status {
+  min-height: 1.5em;
 }

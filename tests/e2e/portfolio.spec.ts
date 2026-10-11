@@ -334,7 +334,7 @@ test("keyboard mobile menu, modified links and confirmed contacts", async ({
     page.getByRole("link", { name: "Chat on WhatsApp" }),
   ).toHaveAttribute("href", /wa\.me\/250795198946/);
   await expect(
-    page.getByRole("link", { name: "princeishimwe754@gmail.com" }),
+    page.getByRole("link", { name: "Use email app" }),
   ).toHaveAttribute("href", /^mailto:princeishimwe754@gmail\.com/);
   await page.goto("/");
   await page.evaluate(() =>
@@ -455,7 +455,68 @@ test("no-JavaScript fallback remains honest and retains email", async ({
   await page.goto("/");
   await expect(page.locator("h1")).toHaveText("Enable JavaScript to explore.");
   await expect(
-    page.getByRole("link", { name: "Send an Email" }),
+    page.getByRole("link", { name: "Use email app" }),
   ).toHaveAttribute("href", "mailto:princeishimwe754@gmail.com");
+  await expect(
+    page.getByRole("link", { name: "Email via Gmail" }),
+  ).toHaveAttribute("href", /^https:\/\/mail\.google\.com\/mail\//);
   await context.close();
+});
+
+test("contact supports browser email and copying with failure feedback", async ({
+  page,
+  context,
+}) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("/#contact");
+  const gmail = page
+    .locator("#contact")
+    .getByRole("link", { name: "Email via Gmail" });
+  await expect(gmail).toHaveAttribute(
+    "href",
+    /https:\/\/mail.google.com\/mail\//,
+  );
+  await context.route("https://mail.google.com/**", (route) =>
+    route.fulfill({ body: "Compose email" }),
+  );
+  const popupPromise = page.waitForEvent("popup");
+  await gmail.click();
+  const popup = await popupPromise;
+  await popup.waitForLoadState();
+  const destination = new URL(popup.url());
+  expect(destination.searchParams.get("to")).toBe("princeishimwe754@gmail.com");
+  expect(destination.searchParams.get("view")).toBe("cm");
+  expect(destination.searchParams.get("su")).toBe("Website project enquiry");
+  await popup.close();
+  await page.getByRole("button", { name: "Copy email address" }).click();
+  await expect(page.getByRole("status")).toHaveText("Email address copied.");
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+    "princeishimwe754@gmail.com",
+  );
+  await page.evaluate(() => {
+    Object.defineProperty(navigator.clipboard, "writeText", {
+      value: () => Promise.reject(new Error("Denied")),
+      configurable: true,
+    });
+  });
+  await page.getByRole("button", { name: "Copy email address" }).click();
+  await expect(page.getByRole("status")).toContainText(
+    "Select the email address above",
+  );
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      value: undefined,
+      configurable: true,
+    });
+  });
+  await page.getByRole("button", { name: "Copy email address" }).click();
+  await expect(page.getByRole("status")).toContainText(
+    "Select the email address above",
+  );
+  await expect(page.locator(".email-address")).toHaveText(
+    "princeishimwe754@gmail.com",
+  );
+  await expect(
+    page.locator("footer").getByRole("link", { name: "Email via Gmail" }),
+  ).toHaveAttribute("href", (await gmail.getAttribute("href")) || "");
 });
