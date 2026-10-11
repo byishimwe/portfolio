@@ -199,7 +199,18 @@ img {
   padding-block: 40px;
 }
 .hero-label {
-  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 26px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+.hero-label::before {
+  content: "";
+  flex: 0 0 24px;
+  height: 1px;
+  background: currentColor;
 }
 .hero h1 {
   font-size: clamp(38px, 3.7vw, 60px);
@@ -686,9 +697,6 @@ img {
   .hero-support p {
     font-size: 14px;
   }
-  .hero-label {
-    font-size: 10px;
-  }
   .project-row {
     grid-template-columns: 28px 1fr 22px 38%;
     gap: 14px;
@@ -743,10 +751,6 @@ img {
   }
   .hero h1 {
     font-size: clamp(34px, 8.6vw, 48px);
-  }
-  .hero-label {
-    font-size: 10px;
-    margin-bottom: 23px;
   }
   .hero-support {
     margin-top: 24px;

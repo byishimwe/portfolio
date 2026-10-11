@@ -91,8 +91,9 @@ export default function Home() {
           <div className="hero-support">
             <p>
               I’m Prince, an independent designer and frontend developer based
-              in Rwanda. I build websites that express your brand, explain what
-              you offer, and make it easy for customers to get in touch.
+              in Rwanda. I create thoughtful websites that reflect your brand,
+              communicate what you offer, and make it easy for customers to
+              connect with you.
             </p>
             <Link className="text-link" to="/#work">
               Explore my work <span aria-hidden="true">→</span>
