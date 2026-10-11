@@ -1013,15 +1013,14 @@ img {
 }
 .email-option {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 8px;
   min-height: 44px;
-  padding: 8px 0;
+  padding: 8px 0 6px;
   color: var(--muted);
   background: transparent;
   border: 0;
-  text-decoration: underline;
-  text-underline-offset: 4px;
+  border-bottom: 1px solid currentColor;
   font-size: 12px;
 }
 .email-option:hover {
