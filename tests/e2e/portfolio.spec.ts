@@ -331,10 +331,10 @@ test("keyboard mobile menu, modified links and confirmed contacts", async ({
   await expect(page).toHaveURL(/#about$/);
   await expect(menu).toHaveAttribute("aria-expanded", "false");
   await expect(
-    page.getByRole("link", { name: "Start a Project" }),
+    page.getByRole("link", { name: "Chat on WhatsApp" }),
   ).toHaveAttribute("href", /wa\.me\/250795198946/);
   await expect(
-    page.getByRole("link", { name: "or send an email" }),
+    page.getByRole("link", { name: "princeishimwe754@gmail.com" }),
   ).toHaveAttribute("href", /^mailto:princeishimwe754@gmail\.com/);
   await page.goto("/");
   await page.evaluate(() =>
