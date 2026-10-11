@@ -469,6 +469,7 @@ test("contact supports browser email and copying with failure feedback", async (
   page,
   context,
 }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/#contact");
   const gmail = page
@@ -490,11 +491,26 @@ test("contact supports browser email and copying with failure feedback", async (
   expect(destination.searchParams.get("view")).toBe("cm");
   expect(destination.searchParams.get("su")).toBe("Website project enquiry");
   await popup.close();
+  await page.clock.install();
+  await page.evaluate(() => document.fonts.ready);
+  const footerBeforeCopy = await page
+    .locator("footer")
+    .evaluate((element) => (element as HTMLElement).offsetTop);
   await page.getByRole("button", { name: "Copy email address" }).click();
   await expect(page.getByRole("status")).toHaveText("Email address copied.");
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
     "princeishimwe754@gmail.com",
   );
+  await page.clock.runFor(1500);
+  await page.getByRole("button", { name: "Copy email address" }).click();
+  await page.clock.runFor(1600);
+  await expect(page.getByRole("status")).toHaveText("Email address copied.");
+  await page.clock.runFor(1400);
+  await expect(page.getByRole("status")).toBeEmpty();
+  const footerAfterCopy = await page
+    .locator("footer")
+    .evaluate((element) => (element as HTMLElement).offsetTop);
+  expect(footerAfterCopy).toBe(footerBeforeCopy);
   await page.evaluate(() => {
     Object.defineProperty(navigator.clipboard, "writeText", {
       value: () => Promise.reject(new Error("Denied")),
@@ -502,6 +518,10 @@ test("contact supports browser email and copying with failure feedback", async (
     });
   });
   await page.getByRole("button", { name: "Copy email address" }).click();
+  await expect(page.getByRole("status")).toContainText(
+    "Select the email address above",
+  );
+  await page.clock.runFor(3500);
   await expect(page.getByRole("status")).toContainText(
     "Select the email address above",
   );

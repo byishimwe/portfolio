@@ -77,7 +77,7 @@ The portfolio is client-rendered. Initial HTML contains homepage metadata; case-
 
 Project copy and destinations live in `src/content/projects.ts`; identity and contact settings are in `src/config/site.ts`. Images live directly in `public/`, with paths, alternative text, intrinsic dimensions, and sharing-image dimensions maintained in `src/config/assets.ts`. Project previews and case studies share their source images. The local `/images/` library is Git-ignored.
 
-The primary email action opens Gmail in a new tab with the recipient and subject filled in; visitors may need to sign into Gmail. Visitors using other services can copy the visible address. Copy failures leave the address selectable and announce manual-copy instructions. No email is sent by the portfolio. The no-JavaScript contact link and visible address in `index.html` must also be kept aligned when changing the contact address.
+The primary email action opens Gmail in a new tab with the recipient and subject filled in; visitors may need to sign into Gmail. Visitors using other services can copy the visible address. Successful copy feedback clears after three seconds without moving the layout; copying again restarts that interval. Copy failures leave the address selectable and keep manual-copy instructions visible. No email is sent by the portfolio. The no-JavaScript contact link and visible address in `index.html` must also be kept aligned when changing the contact address.
 
 ## Deployment
 

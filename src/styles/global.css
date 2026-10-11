@@ -434,11 +434,19 @@ img {
   display: grid;
   grid-template-columns: 1fr 1.1fr;
   gap: 8%;
-  align-items: center;
-  padding-block: 34px 44px;
+  align-items: start;
+  padding-block: 60px;
+}
+.section.contact h2:not(.eyebrow) {
+  font-size: clamp(32px, 3.8vw, 54px);
+  line-height: 1.08;
+  letter-spacing: -0.05em;
+}
+.contact .eyebrow {
+  margin-bottom: 22px;
 }
 .contact-body > p {
-  margin-top: 22px;
+  margin-top: 0;
   font-size: 15px;
 }
 .contact-actions {
@@ -446,7 +454,7 @@ img {
   flex-wrap: wrap;
   gap: 12px 24px;
   align-items: center;
-  margin-top: 26px;
+  margin-top: 22px;
 }
 .button {
   display: inline-flex;
@@ -824,6 +832,9 @@ img {
     gap: 20px;
     padding-block: 30px 36px;
   }
+  .section.contact h2:not(.eyebrow) {
+    font-size: clamp(32px, 8vw, 38px);
+  }
   .contact-body > p {
     margin-top: 0;
   }
@@ -959,8 +970,9 @@ img {
 }
 
 .contact-email {
-  margin-top: 22px;
+  margin-top: 18px;
   font-size: 13px;
+  color: var(--muted);
 }
 .email-address {
   display: block;
@@ -993,7 +1005,5 @@ img {
 }
 .copy-status {
   font-size: 12px;
-}
-.copy-status {
-  min-height: 1.5em;
+  min-height: 1.6em;
 }

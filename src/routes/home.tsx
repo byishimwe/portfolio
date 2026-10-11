@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { projects } from "../content/projects";
 import { AssetSlot } from "../components/AssetSlot";
@@ -51,12 +51,24 @@ function ServiceIcon({ index }: { index: number }) {
 export default function Home() {
   const [copyStatus, setCopyStatus] = useState("");
   const [copying, setCopying] = useState(false);
+  const copyTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(
+    () => () => {
+      if (copyTimeout.current !== null) clearTimeout(copyTimeout.current);
+    },
+    [],
+  );
   async function copyEmail() {
+    if (copyTimeout.current !== null) clearTimeout(copyTimeout.current);
     setCopying(true);
     setCopyStatus("");
     try {
       await navigator.clipboard.writeText(site.email);
       setCopyStatus("Email address copied.");
+      copyTimeout.current = setTimeout(() => {
+        setCopyStatus("");
+        copyTimeout.current = null;
+      }, 3000);
     } catch {
       setCopyStatus(
         "Couldn’t copy automatically. Select the email address above to copy it.",
