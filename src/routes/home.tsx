@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { projects } from "../content/projects";
 import { AssetSlot } from "../components/AssetSlot";
-import { emailUrl, whatsappUrl } from "../config/site";
+import { emailUrl, site, whatsappUrl } from "../config/site";
 import { useQuietMotion } from "../hooks/useQuietMotion";
 const services = [
   [
@@ -178,10 +178,10 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Start a Project <span aria-hidden="true">→</span>
+              Chat on WhatsApp <span aria-hidden="true">→</span>
             </a>
             <a className="text-link" href={emailUrl}>
-              or send an email <span aria-hidden="true">→</span>
+              {site.email} <span aria-hidden="true">→</span>
             </a>
           </div>
         </div>
