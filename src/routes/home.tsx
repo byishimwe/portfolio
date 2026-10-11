@@ -191,8 +191,8 @@ export default function Home() {
         aria-labelledby="contact-title"
         data-reveal
       >
+        <p className="eyebrow contact-label">Contact</p>
         <div className="contact-heading">
-          <p className="eyebrow">Contact</p>
           <h2 id="contact-title">
             Let’s talk about
             <br /> your website.
@@ -232,16 +232,16 @@ export default function Home() {
                 {copying ? "Copying…" : "Copy email address"}
               </button>
             </div>
-            <p
-              className="copy-status"
-              role="status"
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              {copyStatus}
-            </p>
           </div>
         </div>
+        <p
+          className="copy-status"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {copyStatus}
+        </p>
       </section>
     </div>
   );

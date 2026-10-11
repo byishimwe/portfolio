@@ -271,6 +271,24 @@ test("responsive composition in both themes and rendered screenshots", async ({
           ),
         ).toBe(true);
         if (route === "/") {
+          if (viewport.width > 600) {
+            const alignment = await page
+              .locator("#contact")
+              .evaluate((section) => {
+                const bounds = (selector: string) =>
+                  section.querySelector(selector)!.getBoundingClientRect();
+                return {
+                  top:
+                    bounds("#contact-title").top -
+                    bounds(".contact-body > p").top,
+                  bottom:
+                    bounds(".contact-whatsapp").bottom -
+                    bounds(".email-option").bottom,
+                };
+              });
+            expect(Math.abs(alignment.top)).toBeLessThan(1);
+            expect(Math.abs(alignment.bottom)).toBeLessThan(1);
+          }
           if (viewport.width > 800) {
             const frame = await page.locator(".hero-visual").boundingBox();
             expect(frame!.y + frame!.height).toBeLessThan(viewport.height);
